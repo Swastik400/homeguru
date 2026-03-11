@@ -64,7 +64,7 @@ export default function Banner() {
   };
 
   return (
-    <div className="w-full rounded-2xl p-6 flex items-center justify-between relative overflow-hidden" style={{ height: '212px', border: '1px solid #DED3C9' }}>
+    <div className="w-full rounded-2xl p-4 md:p-6 flex items-center justify-between relative overflow-hidden" style={{ minHeight: '212px', border: '1px solid #DED3C9' }}>
       <Image 
         src={slides[activeSlide].image}
         alt="Background" 
@@ -72,11 +72,11 @@ export default function Banner() {
         className="object-cover absolute inset-0 z-0"
         priority
       />
-      <div className="z-10">
-        <h2 className="font-bold mb-2" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '24px', color: slides[activeSlide].titleColor }}>
+      <div className="z-10 max-w-[90%] md:max-w-[60%]">
+        <h2 className="font-bold mb-2 text-[18px] md:text-[24px]" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', color: slides[activeSlide].titleColor }}>
           {slides[activeSlide].title}
         </h2>
-        <p className="mb-4" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '14px', fontWeight: '400', color: slides[activeSlide].descriptionColor }}>
+        <p className="mb-4 text-[12px] md:text-[14px]" style={{ fontFamily: 'var(--font-dm-sans)', fontWeight: '400', color: slides[activeSlide].descriptionColor }}>
           {slides[activeSlide].description.split('\n').map((line, i) => (
             <span key={i}>
               {line}
@@ -84,12 +84,12 @@ export default function Banner() {
             </span>
           ))}
         </p>
-        <button className="rounded-full font-medium hover:opacity-90" style={{ width: '153px', height: '37px', backgroundColor: slides[activeSlide].buttonBgColor, fontFamily: 'var(--font-dm-sans)', fontSize: '16px', fontWeight: '500', color: slides[activeSlide].buttonTextColor }}>
+        <button className="rounded-full font-medium hover:opacity-90 text-[14px] md:text-[16px] px-4 md:px-6 py-2" style={{ height: '37px', backgroundColor: slides[activeSlide].buttonBgColor, fontFamily: 'var(--font-dm-sans)', fontWeight: '500', color: slides[activeSlide].buttonTextColor }}>
           {slides[activeSlide].buttonText}
         </button>
       </div>
       
-      <div className="absolute top-6 right-6 flex items-center gap-3">
+      <div className="absolute top-4 md:top-6 right-4 md:right-6 flex items-center gap-2 md:gap-3">
         {/* Indicator Dots */}
         <div className="flex items-center gap-1.5">
           {[...Array(totalSlides)].map((_, index) => (

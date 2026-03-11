@@ -121,7 +121,7 @@ export default function LearningHours() {
   };
 
   return (
-    <div className="w-full bg-white rounded-[20px] border border-gray-100 p-6 font-sans shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] relative" style={{ height: '323px' }}>
+    <div className="w-full bg-white rounded-[20px] border border-gray-100 p-4 md:p-6 font-sans shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] relative" style={{ minHeight: '323px' }}>
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2.5">
           <BookOpen className="w-5 h-5 text-gray-800" strokeWidth={2} />

@@ -2,16 +2,16 @@
 
 export default function Header() {
   return (
-    <header className="flex items-center justify-between w-full">
+    <header className="flex items-center justify-between w-full flex-wrap gap-4">
       
       {/* Greeting */}
-      <h1 className="text-[24px] text-[#1a202c]" style={{ fontFamily: 'var(--font-plus-jakarta-sans)' }}>
+      <h1 className="text-[20px] md:text-[24px] text-[#1a202c]" style={{ fontFamily: 'var(--font-plus-jakarta-sans)' }}>
         <span className="font-normal">Good morning, </span>
         <span className="font-semibold">Varun</span>
       </h1>
 
       {/* Right Side Tools */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
         
         {/* Search Icon */}
         <button 
@@ -38,7 +38,7 @@ export default function Header() {
         </button>
 
         {/* Lightning / Streak Counter */}
-        <div className="rounded-full flex items-center gap-2 font-medium" style={{ width: '67px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #DCDCDC', paddingLeft: '12px', paddingRight: '12px' }}>
+        <div className="hidden sm:flex rounded-full items-center gap-2 font-medium" style={{ width: '67px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #DCDCDC', paddingLeft: '12px', paddingRight: '12px' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#141B34" viewBox="0 0 256 256">
             <path d="M215.79,118.17a8,8,0,0,0-5-5.66L153.18,90.9l14.66-73.33a8,8,0,0,0-13.69-7l-112,120a8,8,0,0,0,3,13l57.63,21.61L88.16,238.43a8,8,0,0,0,13.69,7l112-120A8,8,0,0,0,215.79,118.17ZM109.37,214l10.47-52.38a8,8,0,0,0-5-9.06L62,132.71l84.62-90.66L136.16,94.43a8,8,0,0,0,5,9.06l52.8,19.8Z"></path>
           </svg>
@@ -46,7 +46,7 @@ export default function Header() {
         </div>
 
         {/* Upgrade Button */}
-        <button className="rounded-full hover:opacity-80 transition-opacity" style={{ width: '100px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #E4D08A', color: '#5A4B15', fontFamily: 'var(--font-dm-sans)', fontSize: '15px', fontWeight: '500' }}>
+        <button className="hidden md:block rounded-full hover:opacity-80 transition-opacity" style={{ width: '100px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #E4D08A', color: '#5A4B15', fontFamily: 'var(--font-dm-sans)', fontSize: '15px', fontWeight: '500' }}>
           Upgrade
         </button>
 

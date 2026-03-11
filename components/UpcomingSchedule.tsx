@@ -90,9 +90,9 @@ export default function UpcomingSchedule() {
       {/* Stacked Card Container */}
       <div className="relative w-full">
         
-        {/* Background Stack Cards */}
+        {/* Background Stack Cards - Hidden on mobile */}
         <div 
-          className="absolute top-2 right-[-6px] border border-[#E5E7EB] rounded-[16px] bg-white z-0 transition-all duration-300 w-full" 
+          className="hidden md:block absolute top-2 right-[-6px] border border-[#E5E7EB] rounded-[16px] bg-white z-0 transition-all duration-300 w-full" 
           style={{ 
             height: '251.34px',
             opacity: isAnimating ? 0 : 1,
@@ -100,7 +100,7 @@ export default function UpcomingSchedule() {
           }}
         ></div>
         <div 
-          className="absolute top-1 right-[-3px] border border-[#E5E7EB] rounded-[16px] bg-white z-0 transition-all duration-300 w-full" 
+          className="hidden md:block absolute top-1 right-[-3px] border border-[#E5E7EB] rounded-[16px] bg-white z-0 transition-all duration-300 w-full" 
           style={{ 
             height: '251.34px',
             opacity: isAnimating ? 0 : 1,
@@ -112,13 +112,13 @@ export default function UpcomingSchedule() {
         <div 
           className="relative z-10 bg-white border border-[#E5E7EB] rounded-[16px] overflow-hidden transition-all duration-300 w-full" 
           style={{ 
-            height: '251.34px',
+            minHeight: '251.34px',
             opacity: isAnimating ? 0.5 : 1,
             transform: isAnimating ? 'scale(0.98)' : 'scale(1)'
           }}
         >
           
-          <div className="relative p-6 flex justify-between gap-6 h-full">
+          <div className="relative p-4 md:p-6 flex flex-col md:flex-row md:justify-between gap-4 md:gap-6 h-full">
             
             {/* Left Side: Course Info */}
             <div className="flex flex-col gap-3 flex-1">
@@ -130,12 +130,12 @@ export default function UpcomingSchedule() {
               </div>
 
               {/* Course Title */}
-              <h3 className="text-[#1A1A1A] leading-tight" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 700, fontSize: '28px' }}>
+              <h3 className="text-[#1A1A1A] leading-tight text-[20px] md:text-[28px]" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 700 }}>
                 {currentSchedule.title}<br />{currentSchedule.subtitle}
               </h3>
 
               {/* Time & Date Info */}
-              <div className="flex items-center gap-3 text-[#6B7280] text-[13px] font-normal" style={{ fontFamily: 'DM Sans' }}>
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[#6B7280] text-[12px] md:text-[13px] font-normal" style={{ fontFamily: 'DM Sans' }}>
                 <span>{currentSchedule.time}</span>
                 <div className="flex items-center gap-1">
                   <Sun size={14} strokeWidth={2} />
@@ -146,29 +146,30 @@ export default function UpcomingSchedule() {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-3 mt-2">
-                <button className="bg-[#3D4A6B] text-white px-5 py-2 rounded-full text-[14px] font-medium hover:bg-[#2f3a54] transition-colors" style={{ fontFamily: 'DM Sans' }}>
+                <button className="bg-[#3D4A6B] text-white px-4 md:px-5 py-2 rounded-full text-[13px] md:text-[14px] font-medium hover:bg-[#2f3a54] transition-colors" style={{ fontFamily: 'DM Sans' }}>
                   Join now
                 </button>
-                <button className="bg-white border border-[#E5E7EB] text-[#1A1A1A] px-5 py-2 rounded-full text-[14px] font-medium hover:bg-gray-50 transition-colors" style={{ fontFamily: 'DM Sans' }}>
+                <button className="bg-white border border-[#E5E7EB] text-[#1A1A1A] px-4 md:px-5 py-2 rounded-full text-[13px] md:text-[14px] font-medium hover:bg-gray-50 transition-colors" style={{ fontFamily: 'DM Sans' }}>
                   Reschedule
                 </button>
               </div>
             </div>
 
-            {/* Right Side: Teacher Profile */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 w-[261.32px] h-[256px] flex items-center justify-center font-sans">
+            {/* Right Side: Teacher Profile - Repositioned for mobile */}
+            <div className="relative md:absolute md:right-6 md:top-1/2 md:-translate-y-1/2 w-full md:w-[261.32px] min-h-[200px] md:h-[256px] flex items-center justify-center font-sans mt-4 md:mt-0">
               
               {/* 1. Background Vector Layer */}
               <div className="absolute inset-0 z-0 flex items-center justify-center">
                 <img 
                   src="/images/Vector.png" 
                   alt="Card Background" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain opacity-100"
+                  style={{ maxWidth: '261.32px', maxHeight: '256px' }}
                 />
               </div>
 
               {/* 2. Foreground Content Layer */}
-              <div className="relative z-10 flex flex-col items-center w-[156.78px] h-[167.09px] -mt-12">
+              <div className="relative z-10 flex flex-col items-center w-full md:w-[156.78px] h-auto md:h-[167.09px] md:-mt-12 py-4 md:py-0">
                 
                 {/* Profile Avatar */}
                 <div className="w-[58.96px] h-[58.96px] min-w-[58.96px] min-h-[58.96px] rounded-full overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.1)] mb-2.5 border-2 border-white flex items-center justify-center">
@@ -183,31 +184,31 @@ export default function UpcomingSchedule() {
                 <div className="flex flex-col items-center font-sans">
                   
                   {/* Name */}
-                  <h4 className="text-[#0F172A] text-[19px] font-bold tracking-[0.01em] mb-2.5">
+                  <h4 className="text-[#0F172A] text-[17px] md:text-[19px] font-bold tracking-[0.01em] mb-2.5 text-center">
                     {currentSchedule.tutorName}
                   </h4>
 
                   {/* Language & Location Row (Flat, no background pills) */}
-                  <div className="flex items-center gap-5 mb-3">
+                  <div className="flex items-center gap-3 md:gap-5 mb-3 flex-wrap justify-center">
                     
                     {/* Subject */}
                     <div className="flex items-center gap-1.5">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-[#475569]">
                         <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
                       </svg>
-                      <span className="text-[#334155] text-[14px] font-medium tracking-wide">{currentSchedule.subject}</span>
+                      <span className="text-[#334155] text-[13px] md:text-[14px] font-medium tracking-wide">{currentSchedule.subject}</span>
                     </div>
 
                     {/* Location */}
                     <div className="flex items-center gap-1.5">
                       <span className="text-[14px] leading-none mb-[1px]">🇮🇳</span>
-                      <span className="text-[#334155] text-[14px] font-medium tracking-wide">{currentSchedule.location}</span>
+                      <span className="text-[#334155] text-[13px] md:text-[14px] font-medium tracking-wide">{currentSchedule.location}</span>
                     </div>
                     
                   </div>
 
                   {/* Spoken Language Detail */}
-                  <div className="flex items-center gap-1.5 text-[#334155] text-[14px] mb-2 tracking-wide">
+                  <div className="flex items-center gap-1.5 text-[#334155] text-[13px] md:text-[14px] mb-2 tracking-wide">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#475569]">
                       <path d="M5 8l6 6"></path>
                       <path d="M4 14l6-6 2-3"></path>
@@ -220,7 +221,7 @@ export default function UpcomingSchedule() {
                   </div>
 
                   {/* Ratings & Lessons Count */}
-                  <div className="flex items-center gap-2 text-[#334155] text-[14px] tracking-wide">
+                  <div className="flex items-center gap-2 text-[#334155] text-[13px] md:text-[14px] tracking-wide flex-wrap justify-center">
                     <span className="flex items-center gap-1">
                       {currentSchedule.rating}
                       <svg className="w-[13px] h-[13px] text-[#334155] fill-current mb-[1px]" viewBox="0 0 20 20">
