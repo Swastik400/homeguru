@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({ 
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-plus-jakarta-sans"
+const seasonMix = localFont({
+  src: "../public/fonts/seasonmix/SeasonMix-TRIAL-Light.otf",
+  variable: "--font-season-mix",
+  weight: "100",
 });
 
-const dmSans = DM_Sans({ 
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans"
+const matter = localFont({
+  src: "../public/fonts/matter/Matter-TRIAL-Regular.otf",
+  variable: "--font-matter",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} ${dmSans.variable}`}>{children}</body>
+      <body className={`${seasonMix.variable} ${matter.variable}`}>{children}</body>
     </html>
   );
 }

@@ -5,9 +5,9 @@ export default function Header() {
     <header className="flex items-center justify-between w-full flex-wrap gap-4">
       
       {/* Greeting */}
-      <h1 className="text-[20px] md:text-[24px] text-[#1a202c]" style={{ fontFamily: 'var(--font-plus-jakarta-sans)' }}>
-        <span className="font-normal">Good morning, </span>
-        <span className="font-semibold">Varun</span>
+      <h1 className="text-[20px] md:text-[24px] text-[#1a202c] font-season">
+        <span>Good morning, </span>
+        <span>Varun</span>
       </h1>
 
       {/* Right Side Tools */}
@@ -46,7 +46,7 @@ export default function Header() {
         </div>
 
         {/* Upgrade Button */}
-        <button className="hidden md:block rounded-full hover:opacity-80 transition-opacity" style={{ width: '100px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #E4D08A', color: '#5A4B15', fontFamily: 'var(--font-dm-sans)', fontSize: '15px', fontWeight: '500' }}>
+        <button className="hidden md:block rounded-full hover:opacity-80 transition-opacity font-matter" style={{ width: '100px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #E4D08A', color: '#5A4B15', fontSize: '15px' }}>
           Upgrade
         </button>
 

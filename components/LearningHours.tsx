@@ -121,16 +121,16 @@ export default function LearningHours() {
   };
 
   return (
-    <div className="w-full bg-white rounded-[20px] border border-gray-100 p-4 md:p-6 font-sans shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] relative" style={{ minHeight: '323px' }}>
+    <div className="w-full bg-white rounded-[20px] border border-gray-100 p-4 md:p-6 font-matter shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] relative" style={{ minHeight: '323px' }}>
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2.5">
           <BookOpen className="w-5 h-5 text-gray-800" strokeWidth={2} />
-          <h2 className="text-[#111827] text-[16px] font-semibold">Learning Hours</h2>
+          <h2 className="text-[#111827] text-[16px] font-season">Learning Hours</h2>
         </div>
         <div className="relative" ref={dropdownRef}>
           <button 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-[8px] text-[13px] text-[#6B7280] font-medium hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-[8px] text-[13px] text-[#6B7280] hover:bg-gray-50 transition-colors"
           >
             {selectedMonth}
             <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -146,7 +146,7 @@ export default function LearningHours() {
                     setIsDropdownOpen(false);
                   }}
                   className={`w-full text-left px-3 py-2 text-[13px] hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg ${
-                    selectedMonth === month ? 'bg-gray-50 text-[#111827] font-semibold' : 'text-[#6B7280]'
+                    selectedMonth === month ? 'bg-gray-50 text-[#111827]' : 'text-[#6B7280]'
                   }`}
                 >
                   {month}
@@ -158,7 +158,7 @@ export default function LearningHours() {
       </div>
       
       <div className="relative flex h-[200px]">
-        <div className="w-[48px] flex flex-col justify-between items-end pr-4 text-[#9CA3AF] text-[12px] font-medium pb-[32px] pt-[8px] shrink-0">
+        <div className="w-[48px] flex flex-col justify-between items-end pr-4 text-[#9CA3AF] text-[12px] pb-[32px] pt-[8px] shrink-0">
           <span>80 hr</span>
           <span>60 hr</span>
           <span>40 hr</span>
@@ -261,7 +261,7 @@ export default function LearningHours() {
             </svg>
           </div>
 
-          <div className="absolute bottom-0 w-full flex justify-between text-[#9CA3AF] text-[12px] font-medium pr-4">
+          <div className="absolute bottom-0 w-full flex justify-between text-[#9CA3AF] text-[12px] pr-4">
             {dataPoints.map((point, idx) => (
               <span key={idx}>{point.date}</span>
             ))}
@@ -279,16 +279,16 @@ export default function LearningHours() {
             >
               {/* Tooltip box */}
               <div className="bg-[#1F2937] text-white p-2.5 rounded-[6px] shadow-xl w-[110px]">
-                <p className="text-[#9CA3AF] text-[10px] font-medium mb-2">{hoveredPoint.date}</p>
+                <p className="text-[#9CA3AF] text-[10px] mb-2">{hoveredPoint.date}</p>
                 
                 <div className="flex items-center gap-1.5 mb-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#5A79C2] shrink-0"></span>
-                  <span className="text-[10px] text-gray-300">Study: <span className="text-white font-semibold">{hoveredPoint.study}</span></span>
+                  <span className="text-[10px] text-gray-300">Study: <span className="text-white">{hoveredPoint.study}</span></span>
                 </div>
                 
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#8BA4F9] shrink-0"></span>
-                  <span className="text-[10px] text-gray-300">Test: <span className="text-white font-semibold">{hoveredPoint.test}</span></span>
+                  <span className="text-[10px] text-gray-300">Test: <span className="text-white">{hoveredPoint.test}</span></span>
                 </div>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function LearningHours() {
         </div>
       </div>
       
-      <div className="mt-2 flex items-center justify-center gap-6 text-[13px] font-medium text-[#6B7280]">
+      <div className="mt-2 flex items-center justify-center gap-6 text-[13px] text-[#6B7280]">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-[#5A79C2]"></span>
           Study

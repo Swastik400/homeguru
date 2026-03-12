@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'season': ['var(--font-season-mix)'],
+        'matter': ['var(--font-matter)'],
+      },
       screens: {
         'xs': '475px',
         'sm': '640px',

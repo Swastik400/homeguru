@@ -73,10 +73,10 @@ export default function Banner() {
         priority
       />
       <div className="z-10 max-w-[90%] md:max-w-[60%]">
-        <h2 className="font-bold mb-2 text-[18px] md:text-[24px]" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', color: slides[activeSlide].titleColor }}>
+        <h2 className="font-season mb-2 text-[18px] md:text-[24px]" style={{ color: slides[activeSlide].titleColor }}>
           {slides[activeSlide].title}
         </h2>
-        <p className="mb-4 text-[12px] md:text-[14px]" style={{ fontFamily: 'var(--font-dm-sans)', fontWeight: '400', color: slides[activeSlide].descriptionColor }}>
+        <p className="mb-4 text-[12px] md:text-[14px] font-matter" style={{ color: slides[activeSlide].descriptionColor }}>
           {slides[activeSlide].description.split('\n').map((line, i) => (
             <span key={i}>
               {line}
@@ -84,7 +84,7 @@ export default function Banner() {
             </span>
           ))}
         </p>
-        <button className="rounded-full font-medium hover:opacity-90 text-[14px] md:text-[16px] px-4 md:px-6 py-2" style={{ height: '37px', backgroundColor: slides[activeSlide].buttonBgColor, fontFamily: 'var(--font-dm-sans)', fontWeight: '500', color: slides[activeSlide].buttonTextColor }}>
+        <button className="rounded-full hover:opacity-90 text-[14px] md:text-[16px] px-4 md:px-6 py-2 font-matter" style={{ height: '37px', backgroundColor: slides[activeSlide].buttonBgColor, color: slides[activeSlide].buttonTextColor }}>
           {slides[activeSlide].buttonText}
         </button>
       </div>

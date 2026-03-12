@@ -2,7 +2,7 @@
 
 export default function StatsCards() {
   return (
-    <div className="bg-white rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] w-full" style={{ minHeight: '104px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px 24px', border: '1px solid #DCDCDC' }}>
+    <div className="bg-white rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] w-full font-matter" style={{ minHeight: '104px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px 24px', border: '1px solid #DCDCDC' }}>
       {/* Grid container with divide-x for the vertical lines */}
       <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 w-full gap-4 sm:gap-0">
         
@@ -14,10 +14,10 @@ export default function StatsCards() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="text-gray-700 mb-1.5" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '15px', fontWeight: '500', lineHeight: '1.2' }}>Classes attended</p>
+            <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>Classes attended</p>
             <div className="flex items-center gap-2">
-              <span className="text-[#111827]" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '22px', fontWeight: '600', lineHeight: '1' }}>16</span>
-              <span className="text-[#10B981] flex items-center" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: '500' }}>
+              <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>16</span>
+              <span className="text-[#10B981] flex items-center" style={{ fontSize: '11px' }}>
                 <svg className="w-2.5 h-2.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                 4 this week
               </span>
@@ -33,10 +33,10 @@ export default function StatsCards() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="text-gray-700 mb-1.5" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '15px', fontWeight: '500', lineHeight: '1.2' }}>Total learning time</p>
+            <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>Total learning time</p>
             <div className="flex items-center gap-2">
-              <span className="text-[#111827]" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '22px', fontWeight: '600', lineHeight: '1' }}>24h</span>
-              <span className="text-[#10B981] flex items-center" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: '500' }}>
+              <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>24h</span>
+              <span className="text-[#10B981] flex items-center" style={{ fontSize: '11px' }}>
                 <svg className="w-2.5 h-2.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                 3.5h this week
               </span>
@@ -52,10 +52,10 @@ export default function StatsCards() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="text-gray-700 mb-1.5" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '15px', fontWeight: '500', lineHeight: '1.2' }}>Assignment done</p>
+            <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>Assignment done</p>
             <div className="flex items-center gap-2">
-              <span className="text-[#111827]" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '22px', fontWeight: '600', lineHeight: '1' }}>3</span>
-              <span className="text-[#D9774B]" style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: '500' }}>
+              <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>3</span>
+              <span className="text-[#D9774B]" style={{ fontSize: '11px' }}>
                 2 pending
               </span>
             </div>

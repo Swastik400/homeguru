@@ -79,10 +79,9 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
   return (
     <aside 
-      className={`bg-[#293763] flex flex-col px-3 py-5 shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out ${
+      className={`bg-[#293763] flex flex-col px-3 py-5 shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out font-matter ${
         isOpen ? 'w-[280px]' : 'w-[80px]'
-      }`} 
-      style={{ fontFamily: 'DM Sans' }}
+      }`}
     >
       
       {/* Logo Container */}
@@ -125,7 +124,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         {navGroups.map((group, index) => (
           <div key={index} className="mb-5">
             {isOpen && (
-              <h3 className="text-[#8E8E8E] text-[13px] font-medium tracking-wider mb-2 px-3" style={{ fontFamily: 'DM Sans' }}>
+              <h3 className="text-[#8E8E8E] text-[13px] font-medium tracking-wider mb-2 px-3">
                 {group.label}
               </h3>
             )}
@@ -141,7 +140,6 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                     } ${
                       !isOpen ? 'justify-center' : ''
                     }`}
-                    style={{ fontFamily: 'DM Sans' }}
                     title={!isOpen ? item.name : ''}
                   >
                     <span className="flex items-center justify-center shrink-0">
