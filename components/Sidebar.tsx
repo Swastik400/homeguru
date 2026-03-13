@@ -1,15 +1,16 @@
 "use client";
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import React, { useMemo, useCallback } from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
-  const navGroups = [
+export default React.memo(function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
+  // Memoize navigation groups to prevent recreation
+  const navGroups = useMemo(() => [
     {
       label: 'MAIN',
       items: [
@@ -75,7 +76,10 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         },
       ],
     },
-  ];
+  ], []);
+
+  const handleToggleOpen = useCallback(() => setIsOpen(true), [setIsOpen]);
+  const handleToggleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
 
   return (
     <aside 
@@ -99,7 +103,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
             />
             
             <button 
-              onClick={() => setIsOpen(false)}
+              onClick={handleToggleClose}
               className="text-[#9CA3AF] hover:text-gray-600 transition-colors" 
               aria-label="Close sidebar"
             >
@@ -108,7 +112,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           </>
         ) : (
           <button 
-            onClick={() => setIsOpen(true)}
+            onClick={handleToggleOpen}
             className="text-[#293763] hover:text-gray-600 transition-colors" 
             aria-label="Open sidebar"
           >
@@ -156,4 +160,4 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       
     </aside>
   );
-}
+});

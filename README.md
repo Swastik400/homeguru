@@ -29,6 +29,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Teacher Dashboard
+
+Access the teacher dashboard at [http://localhost:3000/dashboard/teacher](http://localhost:3000/dashboard/teacher)
+
 ## Project Structure
 
 ```

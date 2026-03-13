@@ -6,11 +6,15 @@ const seasonMix = localFont({
   src: "../public/fonts/seasonmix/SeasonMix-TRIAL-Light.otf",
   variable: "--font-season-mix",
   weight: "100",
+  display: "swap",
+  preload: true,
 });
 
 const matter = localFont({
   src: "../public/fonts/matter/Matter-TRIAL-Regular.otf",
   variable: "--font-matter",
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -25,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${seasonMix.variable} ${matter.variable}`}>{children}</body>
+      <body className={`${seasonMix.variable} ${matter.variable} antialiased`} suppressHydrationWarning>{children}</body>
     </html>
   );
 }

@@ -1,69 +1,74 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const LearningActivity = () => {
+const LearningActivity = React.memo(() => {
   const [selectedMonth, setSelectedMonth] = useState('This month');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const months = ['This month', 'Last month', 'January', 'February', 'March', 'April', 'May', 'June'];
 
-  const monthData: Record<string, any[]> = {
-    'This month': [
-      { day: 1, status: 'default' }, { day: 2, status: 'default' }, { day: 3, status: 'course' },
-      { day: 4, status: 'login' }, { day: 5, status: 'quiz' }, { day: 6, status: 'course' },
-      { day: 7, status: 'login' }, { day: 8, status: 'default' }, { day: 9, status: 'login' },
-      { day: 10, status: 'login' }, { day: 11, status: 'default' }, { day: 12, status: 'course' },
-      { day: 13, status: 'login' }, { day: 14, status: 'default' }, { day: 15, status: 'login' },
-      { day: 16, status: 'login' }, { day: 17, status: 'login' }, { day: 18, status: 'quiz' },
-      { day: 19, status: 'default' }, { day: 20, status: 'default' }, { day: 21, status: 'login' },
-      { day: 22, status: 'default' }, { day: 23, status: 'default' }, { day: 24, status: 'course' },
-      { day: 25, status: 'default' }, { day: 26, status: 'default' }, { day: 27, status: 'default' },
-      { day: 28, status: 'quiz' }, { day: 29, status: 'default' }, { day: 30, status: 'default' },
-      { day: 31, status: 'default' }
-    ],
-    'Last month': [
-      { day: 1, status: 'login' }, { day: 2, status: 'login' }, { day: 3, status: 'default' },
-      { day: 4, status: 'course' }, { day: 5, status: 'login' }, { day: 6, status: 'default' },
-      { day: 7, status: 'quiz' }, { day: 8, status: 'login' }, { day: 9, status: 'login' },
-      { day: 10, status: 'course' }, { day: 11, status: 'login' }, { day: 12, status: 'default' },
-      { day: 13, status: 'default' }, { day: 14, status: 'login' }, { day: 15, status: 'quiz' },
-      { day: 16, status: 'login' }, { day: 17, status: 'default' }, { day: 18, status: 'login' },
-      { day: 19, status: 'course' }, { day: 20, status: 'login' }, { day: 21, status: 'default' },
-      { day: 22, status: 'login' }, { day: 23, status: 'login' }, { day: 24, status: 'default' },
-      { day: 25, status: 'quiz' }, { day: 26, status: 'login' }, { day: 27, status: 'login' },
-      { day: 28, status: 'default' }, { day: 29, status: 'default' }, { day: 30, status: 'default' }
-    ]
-  };
+  // Memoize static data to prevent regeneration
+  const monthData = useMemo(() => {
+    const data: Record<string, any[]> = {
+      'This month': [
+        { day: 1, status: 'default' }, { day: 2, status: 'default' }, { day: 3, status: 'course' },
+        { day: 4, status: 'login' }, { day: 5, status: 'quiz' }, { day: 6, status: 'course' },
+        { day: 7, status: 'login' }, { day: 8, status: 'default' }, { day: 9, status: 'login' },
+        { day: 10, status: 'login' }, { day: 11, status: 'default' }, { day: 12, status: 'course' },
+        { day: 13, status: 'login' }, { day: 14, status: 'default' }, { day: 15, status: 'login' },
+        { day: 16, status: 'login' }, { day: 17, status: 'login' }, { day: 18, status: 'quiz' },
+        { day: 19, status: 'default' }, { day: 20, status: 'default' }, { day: 21, status: 'login' },
+        { day: 22, status: 'default' }, { day: 23, status: 'default' }, { day: 24, status: 'course' },
+        { day: 25, status: 'default' }, { day: 26, status: 'default' }, { day: 27, status: 'default' },
+        { day: 28, status: 'quiz' }, { day: 29, status: 'default' }, { day: 30, status: 'default' },
+        { day: 31, status: 'default' }
+      ],
+      'Last month': [
+        { day: 1, status: 'login' }, { day: 2, status: 'login' }, { day: 3, status: 'default' },
+        { day: 4, status: 'course' }, { day: 5, status: 'login' }, { day: 6, status: 'default' },
+        { day: 7, status: 'quiz' }, { day: 8, status: 'login' }, { day: 9, status: 'login' },
+        { day: 10, status: 'course' }, { day: 11, status: 'login' }, { day: 12, status: 'default' },
+        { day: 13, status: 'default' }, { day: 14, status: 'login' }, { day: 15, status: 'quiz' },
+        { day: 16, status: 'login' }, { day: 17, status: 'default' }, { day: 18, status: 'login' },
+        { day: 19, status: 'course' }, { day: 20, status: 'login' }, { day: 21, status: 'default' },
+        { day: 22, status: 'login' }, { day: 23, status: 'login' }, { day: 24, status: 'default' },
+        { day: 25, status: 'quiz' }, { day: 26, status: 'login' }, { day: 27, status: 'login' },
+        { day: 28, status: 'default' }, { day: 29, status: 'default' }, { day: 30, status: 'default' }
+      ]
+    };
 
-  // Generate random data for other months
-  const generateRandomMonth = (days: number) => {
-    const statuses = ['default', 'login', 'quiz', 'course'];
-    return Array.from({ length: days }, (_, i) => ({
-      day: i + 1,
-      status: Math.random() > 0.4 ? statuses[Math.floor(Math.random() * statuses.length)] : 'default'
-    }));
-  };
+    // Generate random data for other months only once
+    const generateRandomMonth = (days: number) => {
+      const statuses = ['default', 'login', 'quiz', 'course'];
+      return Array.from({ length: days }, (_, i) => ({
+        day: i + 1,
+        status: Math.random() > 0.4 ? statuses[Math.floor(Math.random() * statuses.length)] : 'default'
+      }));
+    };
 
-  if (!monthData['January']) monthData['January'] = generateRandomMonth(31);
-  if (!monthData['February']) monthData['February'] = generateRandomMonth(28);
-  if (!monthData['March']) monthData['March'] = generateRandomMonth(31);
-  if (!monthData['April']) monthData['April'] = generateRandomMonth(30);
-  if (!monthData['May']) monthData['May'] = generateRandomMonth(31);
-  if (!monthData['June']) monthData['June'] = generateRandomMonth(30);
+    data['January'] = generateRandomMonth(31);
+    data['February'] = generateRandomMonth(28);
+    data['March'] = generateRandomMonth(31);
+    data['April'] = generateRandomMonth(30);
+    data['May'] = generateRandomMonth(31);
+    data['June'] = generateRandomMonth(30);
+
+    return data;
+  }, []);
 
   const calendarData = monthData[selectedMonth] || monthData['This month'];
 
-  const calculateStats = () => {
+  // Memoize stats calculation
+  const stats = useMemo(() => {
     const loginDays = calendarData.filter(d => d.status === 'login').length;
     const quizAttempts = calendarData.filter(d => d.status === 'quiz').length;
     const newCourses = calendarData.filter(d => d.status === 'course').length;
     return { loginDays, quizAttempts, newCourses };
-  };
+  }, [calendarData]);
 
-  const stats = calculateStats();
-
-  const getStatusStyles = (status: string) => {
+  // Memoize status styles function
+  const getStatusStyles = useCallback((status: string) => {
     switch (status) {
       case 'login':
         return 'bg-[#A4EBB8] text-[#1A1A1A]';
@@ -74,7 +79,16 @@ const LearningActivity = () => {
       default:
         return 'bg-[#EFEFEF] text-[#565656]';
     }
-  };
+  }, []);
+
+  const handleMonthSelect = useCallback((month: string) => {
+    setSelectedMonth(month);
+    setIsDropdownOpen(false);
+  }, []);
+
+  const toggleDropdown = useCallback(() => {
+    setIsDropdownOpen(prev => !prev);
+  }, []);
 
   return (
     <div 
@@ -88,7 +102,7 @@ const LearningActivity = () => {
           
           <div className="relative">
             <button 
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={toggleDropdown}
               className="flex items-center gap-1.5 px-3 py-1.5 border border-[#E5E7EB] rounded-lg text-[13px] font-normal text-[#6B7280] hover:bg-gray-50 transition-colors"
             >
               {selectedMonth}
@@ -100,10 +114,7 @@ const LearningActivity = () => {
                 {months.map((month) => (
                   <button
                     key={month}
-                    onClick={() => {
-                      setSelectedMonth(month);
-                      setIsDropdownOpen(false);
-                    }}
+                    onClick={() => handleMonthSelect(month)}
                     className={`w-full text-left px-3 py-2 text-[13px] hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg ${
                       selectedMonth === month ? 'bg-gray-50 text-[#1A1A1A] font-medium' : 'text-[#6B7280]'
                     }`}
@@ -153,6 +164,8 @@ const LearningActivity = () => {
       </div>
     </div>
   );
-};
+});
+
+LearningActivity.displayName = 'LearningActivity';
 
 export default LearningActivity;

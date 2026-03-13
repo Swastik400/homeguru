@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
+import Image from 'next/image';
 
 const TEACHERS_DATA = [
   {
@@ -64,7 +65,103 @@ const TEACHERS_DATA = [
   },
 ];
 
-export default function TrendingTeachersTable() {
+// Memoized SortArrows component
+const SortArrows = React.memo(() => (
+  <div className="flex flex-col gap-[1px] opacity-60">
+    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+));
+SortArrows.displayName = 'SortArrows';
+
+// Memoized TeacherRow component
+const TeacherRow = React.memo(({ teacher, index, isLast }: { teacher: typeof TEACHERS_DATA[0], index: number, isLast: boolean }) => (
+  <tr 
+    className={`${!isLast ? 'border-b border-gray-100' : ''} hover:bg-gray-50/50 transition-colors`}
+  >
+    {/* Teachers Column */}
+    <td className="py-4 pl-6 pr-4 align-middle">
+      <div className="flex items-center gap-3.5">
+        <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 relative">
+          <Image 
+            src={teacher.avatar} 
+            alt={teacher.name} 
+            width={40}
+            height={40}
+            className="object-cover"
+            loading="lazy"
+          />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-[#111827] text-[15px] mb-[1px]">
+            {teacher.name}
+          </span>
+          <div className="flex items-center gap-1.5 text-[#A5998B] text-[11.5px]">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="12" y1="3" x2="12" y2="21"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+            </svg>
+            {teacher.subject}
+          </div>
+        </div>
+      </div>
+    </td>
+
+    {/* Rating Column */}
+    <td className="py-4 px-4 align-middle">
+      <div className="flex items-center gap-1.5 text-[#111827] text-[14.5px]">
+        {teacher.rating}
+        <svg className="w-3.5 h-3.5 text-[#111827] fill-current mb-[2px]" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+        </svg>
+      </div>
+    </td>
+
+    {/* Lessons Column */}
+    <td className="py-4 px-4 align-middle">
+      <span className="text-[#111827] text-[14.5px]">
+        {teacher.lessons}
+      </span>
+    </td>
+
+    {/* Rate Column */}
+    <td className="py-4 px-4 align-middle">
+      <span className="text-[#111827] text-[14.5px]">
+        {teacher.rate}
+      </span>
+    </td>
+
+    {/* Trend Column */}
+    <td className="py-4 px-4 align-middle">
+      <div className="flex items-start gap-1.5">
+        {/* Green Trending Arrow */}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2D8946" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-[2px]">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+          <polyline points="16 7 22 7 22 13"></polyline>
+        </svg>
+        
+        <div className="flex flex-col leading-[1.2]">
+          <span className="text-[#2D8946] text-[12px]">
+            {teacher.trend} classes
+          </span>
+          <span className="text-[#2D8946] text-[12px]">
+            this week
+          </span>
+        </div>
+      </div>
+    </td>
+  </tr>
+));
+TeacherRow.displayName = 'TeacherRow';
+
+export default React.memo(function TrendingTeachersTable() {
+  // Memoize teachers data to prevent re-creation
+  const teachers = useMemo(() => TEACHERS_DATA, []);
 
   return (
     <div className="w-full font-matter">
@@ -124,79 +221,13 @@ export default function TrendingTeachersTable() {
           <table className="w-full text-left border-collapse min-w-[600px]">
           {/* Table Body */}
           <tbody>
-            {TEACHERS_DATA.map((teacher, index) => (
-              <tr 
-                key={teacher.id} 
-                className={`${index !== TEACHERS_DATA.length - 1 ? 'border-b border-gray-100' : ''} hover:bg-gray-50/50 transition-colors`}
-              >
-                
-                {/* Teachers Column */}
-                <td className="py-4 pl-6 pr-4 align-middle">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
-                      <img src={teacher.avatar} alt={teacher.name} className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[#111827] text-[15px] mb-[1px]">
-                        {teacher.name}
-                      </span>
-                      <div className="flex items-center gap-1.5 text-[#A5998B] text-[11.5px]">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                          <line x1="12" y1="3" x2="12" y2="21"></line>
-                          <line x1="3" y1="12" x2="21" y2="12"></line>
-                        </svg>
-                        {teacher.subject}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-
-                {/* Rating Column */}
-                <td className="py-4 px-4 align-middle">
-                  <div className="flex items-center gap-1.5 text-[#111827] text-[14.5px]">
-                    {teacher.rating}
-                    <svg className="w-3.5 h-3.5 text-[#111827] fill-current mb-[2px]" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                  </div>
-                </td>
-
-                {/* Lessons Column */}
-                <td className="py-4 px-4 align-middle">
-                  <span className="text-[#111827] text-[14.5px]">
-                    {teacher.lessons}
-                  </span>
-                </td>
-
-                {/* Rate Column */}
-                <td className="py-4 px-4 align-middle">
-                  <span className="text-[#111827] text-[14.5px]">
-                    {teacher.rate}
-                  </span>
-                </td>
-
-                {/* Trend Column */}
-                <td className="py-4 px-4 align-middle">
-                  <div className="flex items-start gap-1.5">
-                    {/* Green Trending Arrow */}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2D8946" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-[2px]">
-                      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                      <polyline points="16 7 22 7 22 13"></polyline>
-                    </svg>
-                    
-                    <div className="flex flex-col leading-[1.2]">
-                      <span className="text-[#2D8946] text-[12px]">
-                        {teacher.trend} classes
-                      </span>
-                      <span className="text-[#2D8946] text-[12px]">
-                        this week
-                      </span>
-                    </div>
-                  </div>
-                </td>
-
-              </tr>
+            {teachers.map((teacher, index) => (
+              <TeacherRow 
+                key={teacher.id}
+                teacher={teacher}
+                index={index}
+                isLast={index === teachers.length - 1}
+              />
             ))}
           </tbody>
         </table>
@@ -204,18 +235,4 @@ export default function TrendingTeachersTable() {
       </div>
     </div>
   );
-}
-
-// Reusable micro-component for the column sorting arrows
-function SortArrows() {
-  return (
-    <div className="flex flex-col gap-[1px] opacity-60">
-      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="18 15 12 9 6 15"></polyline>
-      </svg>
-      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
-    </div>
-  );
-}
+});
