@@ -121,16 +121,16 @@ export default function LearningHours() {
   };
 
   return (
-    <div className="w-full bg-white rounded-[20px] border border-gray-100 p-4 md:p-6 font-matter shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] relative" style={{ minHeight: '323px' }}>
+    <div className="w-full bg-white rounded-[16px] border border-[#E5E7EB] p-4 md:p-6 font-matter relative" style={{ minHeight: '323px' }}>
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2.5">
           <BookOpen className="w-5 h-5 text-gray-800" strokeWidth={2} />
-          <h2 className="text-[#111827] text-[16px] font-season">Learning Hours</h2>
+          <h2 className="text-[#111827] text-[16px] font-season font-bold">Learning Hours</h2>
         </div>
         <div className="relative" ref={dropdownRef}>
           <button 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-[8px] text-[13px] text-[#6B7280] hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 border border-[#E5E7EB] rounded-full text-[13px] text-[#6B7280] hover:bg-[#F9FAFB] transition-colors"
           >
             {selectedMonth}
             <ChevronDown className="w-3.5 h-3.5 text-gray-400" />

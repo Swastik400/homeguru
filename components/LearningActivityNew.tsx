@@ -21,7 +21,7 @@ export default function LearningActivity() {
       
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-[#1A1A1A] text-[18px] font-semibold tracking-wide">
+        <h2 className="text-[#111827] text-[16px] font-season font-bold">
           Learning Activity
         </h2>
         

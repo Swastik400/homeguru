@@ -82,9 +82,7 @@ export default function UpcomingSchedule() {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#1A1A1A" viewBox="0 0 256 256">
           <path d="M200,75.64V40a16,16,0,0,0-16-16H72A16,16,0,0,0,56,40V76a16.07,16.07,0,0,0,6.4,12.8L114.67,128,62.4,167.2A16.07,16.07,0,0,0,56,180v36a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V180.36a16.09,16.09,0,0,0-6.35-12.77L141.27,128l52.38-39.6A16.05,16.05,0,0,0,200,75.64ZM184,216H72V180l56-42,56,42.35Zm0-140.36L128,118,72,76V40H184Z"></path>
         </svg>
-        <h2 className="text-[#1A1A1A] font-season" style={{ fontSize: '17px' }}>
-          Upcoming Schedule
-        </h2>
+        <h2 className="text-[#111827] text-[16px] font-season font-bold">Upcoming Schedule</h2>
       </div>
 
       {/* Stacked Card Container */}

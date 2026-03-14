@@ -18,7 +18,7 @@ export default function Home() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
+    <div className="flex h-screen bg-white overflow-hidden">
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />

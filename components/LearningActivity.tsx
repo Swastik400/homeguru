@@ -84,7 +84,7 @@ const LearningActivity = () => {
       {/* Header Section */}
       <div className="px-5 pt-5 pb-3">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[#1A1A1A]" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 600, fontSize: '17px' }}>Learning Activity</h2>
+          <h2 className="text-[#111827] text-[16px] font-season font-bold">Learning Activity</h2>
           
           <div className="relative">
             <button 
