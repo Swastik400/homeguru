@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Plus, Edit, Trash2, Eye, BookOpen, Video, FileText, ChevronDown, ChevronRight } from "lucide-react";
+import "./CourseBuilder.css";
 
 const MOCK_COURSES = [
   {
@@ -37,187 +38,286 @@ export default function CourseBuilder() {
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
 
-  const toggleCourse = (id: number) => {
-    setExpandedCourse(expandedCourse === id ? null : id);
-  };
+  const [newCourse, setNewCourse] = useState({ title: '', description: '', thumbnail: '', status: 'draft' });
+  const [newLesson, setNewLesson] = useState({ title: '', description: '', contentUrl: '', type: 'video', duration: '' });
 
   const handleAddLesson = (courseId: number) => {
     setSelectedCourse(courseId);
     setShowLessonModal(true);
   };
 
+  const handleCreateCourse = () => {
+    if (!newCourse.title.trim()) return;
+    
+    setCourses([...courses, {
+      id: Date.now(),
+      title: newCourse.title,
+      description: newCourse.description,
+      thumbnail: newCourse.thumbnail || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400',
+      status: newCourse.status,
+      students: 0,
+      lessons: []
+    }]);
+    
+    setNewCourse({ title: '', description: '', thumbnail: '', status: 'draft' });
+    setShowCreateModal(false);
+  };
+
+  const handleAddLessonSubmit = () => {
+    if (!selectedCourse || !newLesson.title.trim()) return;
+
+    setCourses(courses.map(course => {
+      if (course.id === selectedCourse) {
+        return {
+          ...course,
+          lessons: [
+            ...course.lessons,
+            {
+              id: Date.now(),
+              title: newLesson.title,
+              type: newLesson.type,
+              duration: newLesson.duration || '0 min',
+              order: course.lessons.length + 1
+            }
+          ]
+        };
+      }
+      return course;
+    }));
+
+    setNewLesson({ title: '', description: '', contentUrl: '', type: 'video', duration: '' });
+    setShowLessonModal(false);
+  };
+
+  const handleDeleteCourse = (courseId: number) => {
+    setCourses(courses.filter(c => c.id !== courseId));
+    if (selectedCourse === courseId) setSelectedCourse(null);
+  };
+
+  const handleDeleteLesson = (courseId: number, lessonId: number) => {
+    setCourses(courses.map(course => {
+      if (course.id === courseId) {
+        return {
+          ...course,
+          lessons: course.lessons.filter(l => l.id !== lessonId)
+        };
+      }
+      return course;
+    }));
+  };
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
-      {/* Header */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">Course Builder</h2>
-            <p className="text-sm text-gray-500 mt-1">Create and manage your courses</p>
-          </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Create Course
-          </button>
+    <div className="billing-page">
+      {/* Courses List - Horizontal Scroll */}
+      <div className="credits-scroll-container">
+        <div className="credits-cards">
+          {courses.length === 0 ? (
+            <div className="credits-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: '100%' }}>
+              <BookOpen className="w-10 h-10 text-gray-400 mb-2" />
+              <p className="text-gray-500 font-matter">No courses yet. Create your first course!</p>
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="mt-4 flex items-center gap-2 px-4 py-2 bg-[#111] text-white rounded-lg hover:bg-black transition-colors font-matter text-sm"
+              >
+                <Plus className="w-4 h-4" />
+                Create Course
+              </button>
+            </div>
+          ) : (
+            <>
+              {courses.map((course) => (
+                <button
+                  key={course.id}
+                  className={`credits-card ${selectedCourse === course.id ? 'active' : ''}`}
+                  onClick={() => setSelectedCourse(course.id)}
+                  style={selectedCourse === course.id ? { borderColor: '#111', boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)' } : {}}
+                >
+                  <div className="credits-amount" style={{ fontSize: '20px', lineHeight: '1.2', marginBottom: '12px' }}>
+                    {course.title}
+                  </div>
+                  <div className="credits-label" style={{ marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontSize: '13px' }}>
+                    {course.description}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
+                    <span className={`ci-badge ${course.status === 'published' ? 'passed' : 'failed'}`}>
+                      {course.status}
+                    </span>
+                    <span className="text-[11px] text-gray-500 font-matter font-medium">
+                      {course.lessons.length} lessons
+                    </span>
+                  </div>
+                </button>
+              ))}
+              
+              <button
+                className="credits-card"
+                onClick={() => setShowCreateModal(true)}
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  background: 'transparent',
+                  border: '2px dashed #e5e7eb',
+                  boxShadow: 'none',
+                  minWidth: '200px'
+                }}
+              >
+                <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+                  <Plus className="w-6 h-6 text-gray-500" />
+                </div>
+                <span className="font-matter font-medium text-gray-600">Create New Course</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Courses List */}
-      <div className="p-6 space-y-4">
-        {courses.length === 0 ? (
-          <div className="text-center py-12">
-            <BookOpen className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-            <p className="text-gray-500">No courses yet. Create your first course!</p>
+      <div className="billing-tabs">
+        <div className="billing-tab active" role="tab" aria-selected="true">Course Info</div>
+      </div>
+
+      {!selectedCourse ? (
+        <div className="empty-state" role="status">
+          <img 
+            src="https://dashboard.sarvam.ai/assets/empty-table.webp" 
+            alt="No course selected" 
+            className="empty-image"
+          />
+          <div className="empty-title">No course selected</div>
+          <div className="empty-desc">
+            Your course details and lessons will appear here once you select or create a course.
           </div>
-        ) : (
-          courses.map((course) => (
-            <div key={course.id} className="border border-gray-200 rounded-xl overflow-hidden">
-              {/* Course Header */}
-              <div className="p-4 bg-gray-50 flex items-center gap-4">
-                <img
-                  src={course.thumbnail}
-                  alt={course.title}
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-gray-900">{course.title}</h3>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      course.status === "published"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}>
-                      {course.status}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">{course.description}</p>
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span>{course.lessons.length} lessons</span>
-                    <span>{course.students} students enrolled</span>
-                  </div>
+        </div>
+      ) : (
+        <div className="project-metadata">
+          {courses.filter(c => c.id === selectedCourse).map(course => (
+            <div key={course.id}>
+              <div className="meta-header">
+                <div className="meta-title-section">
+                  <h2 className="meta-title">{course.title}</h2>
+                  <span className="meta-username">{course.description}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
-                    <Eye className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
-                    <Edit className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
-                    <Trash2 className="w-4 h-4 text-red-600" />
-                  </button>
-                  <button
-                    onClick={() => toggleCourse(course.id)}
-                    className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
-                  >
-                    {expandedCourse === course.id ? (
-                      <ChevronDown className="w-4 h-4 text-gray-600" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 text-gray-600" />
-                    )}
-                  </button>
+                <div className="flex items-center gap-3">
+                  <span className={`ci-badge ${course.status === 'published' ? 'passed' : 'failed'}`}>
+                    {course.status}
+                  </span>
+                  <div className="flex gap-1">
+                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleDeleteCourse(course.id)} className="p-2 hover:bg-red-50 rounded-lg transition-colors text-red-600">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Lessons List */}
-              {expandedCourse === course.id && (
-                <div className="p-4 space-y-2">
-                  {course.lessons.map((lesson) => (
-                    <div
-                      key={lesson.id}
-                      className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
-                    >
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                        {lesson.type === "video" ? (
-                          <Video className="w-4 h-4 text-blue-600" />
-                        ) : (
-                          <FileText className="w-4 h-4 text-blue-600" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900 text-sm">{lesson.title}</div>
-                        <div className="text-xs text-gray-500">{lesson.duration}</div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button className="p-1.5 hover:bg-gray-200 rounded transition-colors">
-                          <Edit className="w-3.5 h-3.5 text-gray-600" />
-                        </button>
-                        <button className="p-1.5 hover:bg-gray-200 rounded transition-colors">
-                          <Trash2 className="w-3.5 h-3.5 text-red-600" />
-                        </button>
-                      </div>
+              <div className="meta-grid">
+                <div className="meta-col-main">
+                  <div className="info-section">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-matter font-medium text-[15px] text-[#111]">Course Lessons</h3>
+                      <button 
+                        onClick={() => handleAddLesson(course.id)}
+                        className="text-xs font-matter font-medium text-[#4f46e5] hover:text-[#4338ca] transition-colors"
+                      >
+                        + Add Lesson
+                      </button>
                     </div>
-                  ))}
-                  <button
-                    onClick={() => handleAddLesson(course.id)}
-                    className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-gray-400 hover:bg-gray-50 transition-colors"
+                    
+                    {course.lessons.length === 0 ? (
+                      <div className="text-center py-6 border border-dashed border-gray-200 rounded-xl">
+                        <p className="text-sm text-gray-500 font-matter">No lessons added yet.</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {course.lessons.map((lesson) => (
+                          <div
+                            key={lesson.id}
+                            className="flex items-center gap-3 p-3 border border-[#f0f0f0] rounded-xl hover:border-[#e5e7eb] transition-colors bg-[#fafafa]"
+                          >
+                            <div className="w-8 h-8 bg-white border border-[#e5e7eb] rounded-lg flex items-center justify-center shrink-0">
+                              {lesson.type === "video" ? (
+                                <Video className="w-4 h-4 text-[#4f46e5]" />
+                              ) : (
+                                <FileText className="w-4 h-4 text-[#4f46e5]" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-matter font-medium text-[#111] text-sm truncate">{lesson.title}</div>
+                              <div className="font-matter text-xs text-[#6b7280]">{lesson.duration} • {lesson.type}</div>
+                            </div>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <button className="p-1.5 hover:bg-white rounded transition-colors border border-transparent hover:border-[#e5e7eb]">
+                                <Edit className="w-3.5 h-3.5 text-[#6b7280]" />
+                              </button>
+                              <button onClick={() => handleDeleteLesson(course.id, lesson.id)} className="p-1.5 hover:bg-red-50 rounded transition-colors border border-transparent hover:border-red-100 text-red-600">
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="meta-col-side">
+                  <div className="score-section border border-[#f0f0f0]">
+                    <div className="score-label">Enrolled Students</div>
+                    <div className="score-number">{course.students}</div>
+                    <div className="score-max">active learners</div>
+                  </div>
+
+                  <button 
+                    onClick={() => handleAddLesson(course.id)} 
+                    style={{ 
+                      width: "100%", padding: "12px 16px", background: "#111", border: "none", 
+                      borderRadius: "8px", fontSize: "13px", fontWeight: "500", color: "#fff", 
+                      cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                      fontFamily: "'Matter', sans-serif", transition: "background 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = '#000'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = '#111'}
                   >
-                    + Add Lesson
+                    <Plus className="w-4 h-4" />
+                    Add New Lesson
                   </button>
                 </div>
-              )}
+              </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Create Course Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900">Create New Course</h3>
+        <div className="agent-loading-backdrop" onClick={() => setShowCreateModal(false)}>
+          <div className="agent-loading-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px", padding: "0", overflow: "hidden" }}>
+            <div style={{ padding: "20px 24px", borderBottom: "1px solid #f0f0f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ fontSize: "20px", fontWeight: "600", color: "#111", margin: 0, fontFamily: "'Matter', sans-serif" }}>Create New Course</h3>
             </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
-                <input
-                  type="text"
-                  placeholder="e.g., Advanced Mathematics"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+            <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Course Title</label>
+                <input value={newCourse.title} onChange={(e) => setNewCourse({...newCourse, title: e.target.value})} placeholder="e.g., Advanced Mathematics" style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"} />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                <textarea
-                  placeholder="Describe what students will learn..."
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Description</label>
+                <textarea value={newCourse.description} onChange={(e) => setNewCourse({...newCourse, description: e.target.value})} rows={3} placeholder="Describe what students will learn..." style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s", resize: "none" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"} />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail URL</label>
-                <input
-                  type="text"
-                  placeholder="https://..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Status</label>
+                <select value={newCourse.status} onChange={(e) => setNewCourse({...newCourse, status: e.target.value})} style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s", background: "#fff" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}>
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>
                 </select>
               </div>
             </div>
-            <div className="p-6 border-t border-gray-200 flex gap-3 justify-end">
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  setShowCreateModal(false);
-                  alert("Course created!");
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
+            <div style={{ padding: "16px 24px", background: "#fafafa", borderTop: "1px solid #f0f0f0", display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <button onClick={() => setShowCreateModal(false)} style={{ padding: "9px 16px", background: "#fff", border: "1px solid #e5e7eb", borderRadius: "6px", color: "#6b7280", fontSize: "13px", fontWeight: "500", cursor: "pointer", fontFamily: "'Matter', sans-serif", transition: "all 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'} onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}>Cancel</button>
+              <button onClick={handleCreateCourse} style={{ padding: "9px 20px", background: "#111", border: "none", borderRadius: "6px", color: "#fff", fontSize: "13px", fontWeight: "500", cursor: "pointer", fontFamily: "'Matter', sans-serif", display: "flex", alignItems: "center", gap: "8px", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = '#000'} onMouseLeave={(e) => e.currentTarget.style.background = '#111'}>
                 Create Course
               </button>
             </div>
@@ -227,52 +327,43 @@ export default function CourseBuilder() {
 
       {/* Add Lesson Modal */}
       {showLessonModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900">Add New Lesson</h3>
+        <div className="agent-loading-backdrop" onClick={() => setShowLessonModal(false)}>
+          <div className="agent-loading-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px", padding: "0", overflow: "hidden" }}>
+            <div style={{ padding: "20px 24px", borderBottom: "1px solid #f0f0f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ fontSize: "20px", fontWeight: "600", color: "#111", margin: 0, fontFamily: "'Matter', sans-serif" }}>Add New Lesson</h3>
             </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Lesson Title</label>
-                <input
-                  type="text"
-                  placeholder="e.g., Introduction to Calculus"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+            <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Lesson Title</label>
+                <input value={newLesson.title} onChange={(e) => setNewLesson({...newLesson, title: e.target.value})} placeholder="e.g., Introduction to Calculus" style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"} />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                  <option value="video">Video Lesson</option>
-                  <option value="assignment">Assignment</option>
-                  <option value="quiz">Quiz</option>
-                  <option value="reading">Reading Material</option>
-                </select>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Description</label>
+                <textarea value={newLesson.description} onChange={(e) => setNewLesson({...newLesson, description: e.target.value})} rows={2} placeholder="Brief description of the lesson..." style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s", resize: "none" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"} />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Duration</label>
-                <input
-                  type="text"
-                  placeholder="e.g., 45 min"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Content URL / Attachment Link</label>
+                <input value={newLesson.contentUrl} onChange={(e) => setNewLesson({...newLesson, contentUrl: e.target.value})} placeholder="https://..." style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"} />
+              </div>
+              <div style={{ display: "flex", gap: "16px" }}>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Type</label>
+                  <select value={newLesson.type} onChange={(e) => setNewLesson({...newLesson, type: e.target.value})} style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s", background: "#fff" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}>
+                    <option value="video">Video Lesson</option>
+                    <option value="assignment">Assignment</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="reading">Reading Material</option>
+                  </select>
+                </div>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <label style={{ fontSize: "11px", fontWeight: "500", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Matter', sans-serif" }}>Duration</label>
+                  <input value={newLesson.duration} onChange={(e) => setNewLesson({...newLesson, duration: e.target.value})} placeholder="e.g., 45 min" style={{ padding: "9px 12px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", fontFamily: "'Matter', sans-serif", outline: "none", transition: "border 0.2s" }} onFocus={(e) => e.target.style.borderColor = "#111"} onBlur={(e) => e.target.style.borderColor = "#e5e7eb"} />
+                </div>
               </div>
             </div>
-            <div className="p-6 border-t border-gray-200 flex gap-3 justify-end">
-              <button
-                onClick={() => setShowLessonModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  setShowLessonModal(false);
-                  alert("Lesson added!");
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
+            <div style={{ padding: "16px 24px", background: "#fafafa", borderTop: "1px solid #f0f0f0", display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <button onClick={() => setShowLessonModal(false)} style={{ padding: "9px 16px", background: "#fff", border: "1px solid #e5e7eb", borderRadius: "6px", color: "#6b7280", fontSize: "13px", fontWeight: "500", cursor: "pointer", fontFamily: "'Matter', sans-serif", transition: "all 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'} onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}>Cancel</button>
+              <button onClick={handleAddLessonSubmit} style={{ padding: "9px 20px", background: "#111", border: "none", borderRadius: "6px", color: "#fff", fontSize: "13px", fontWeight: "500", cursor: "pointer", fontFamily: "'Matter', sans-serif", display: "flex", alignItems: "center", gap: "8px", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = '#000'} onMouseLeave={(e) => e.currentTarget.style.background = '#111'}>
                 Add Lesson
               </button>
             </div>

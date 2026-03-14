@@ -161,8 +161,9 @@ export default function ChatPage() {
         {/* Chat Header */}
         <div className="px-5 py-3.5 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F1F5F9]">
           <div className="flex items-center gap-3.5">
-            <button onClick={() => setShowContacts(true)} className="lg:hidden p-1.5 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-[#E2E8F0] transition-all">
-              <ChevronLeft size={20} />
+            <button onClick={() => setShowContacts(true)} className="flex lg:hidden items-center gap-1 px-3 py-1.5 text-[#0F172A] bg-white border border-[#E2E8F0] rounded-xl shadow-sm hover:bg-[#F8FAFC] active:scale-95 transition-all">
+              <ChevronLeft size={18} strokeWidth={2.5} />
+              <span className="text-[12px] font-bold pr-1">Back</span>
             </button>
             <img src={selectedContact.avatar} alt={selectedContact.name} className="w-10 h-10 rounded-full object-cover border border-[#E2E8F0] shadow-sm" />
             <div>

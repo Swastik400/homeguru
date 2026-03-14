@@ -1,5 +1,6 @@
 "use client";
-import { FileText, CheckCircle, RotateCcw, ChevronRight, User } from "lucide-react";
+import { FileText, CheckCircle, ArrowClockwise, CaretRight, User } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
 
 /**
  * Enterprise Recent Submissions
@@ -37,13 +38,15 @@ const SUBMISSIONS = [
 ];
 
 export default function RecentSubmissions() {
+  const router = useRouter();
+
   return (
     <div className="w-full bg-white rounded-[24px] border border-gray-200 font-matter shadow-sm h-full flex flex-col overflow-hidden">
 
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-gray-50 bg-[#F9FAFB]/50">
         <div className="flex items-center gap-2.5">
-          <FileText size={18} className="text-black" />
+          <FileText size={18} weight="bold" className="text-black" />
           <h2 className="text-[#111827] text-[17px] font-bold font-season">Recent Submissions</h2>
         </div>
         <span className="text-[11px] font-black text-white bg-red-500 px-2 py-0.5 rounded-full">3 New</span>
@@ -70,7 +73,7 @@ export default function RecentSubmissions() {
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <div className="flex items-center gap-1 text-[11px] font-bold text-gray-500">
-                    <User size={10} />
+                    <User size={10} weight="bold" />
                     <span className="truncate">{item.student}</span>
                   </div>
                   <span className="text-gray-200 text-[11px]">|</span>
@@ -81,16 +84,20 @@ export default function RecentSubmissions() {
 
             {/* Quick Actions Group */}
             <div className="flex items-center gap-2 mt-4 md:mt-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-all">
-              <button title="Grade & Return" className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white rounded-lg text-[11px] font-bold shadow-sm hover:scale-105 transition-all">
-                <CheckCircle size={12} />
+              <button 
+                title="Grade & Return" 
+                onClick={(e) => { e.stopPropagation(); router.push(`/dashboard/teacher/grading/${item.id}`); }}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white rounded-lg text-[11px] font-bold shadow-sm hover:scale-105 transition-all"
+              >
+                <CheckCircle size={12} weight="bold" />
                 <span>Grade</span>
               </button>
               <button title="Request Revision" className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-[11px] font-bold hover:bg-gray-50 transition-all shadow-sm">
-                <RotateCcw size={12} />
+                <ArrowClockwise size={12} weight="bold" />
                 <span>Redo</span>
               </button>
               <button className="p-2 text-gray-400 hover:text-black transition-all">
-                <ChevronRight size={16} />
+                <CaretRight size={16} weight="bold" />
               </button>
             </div>
           </div>
@@ -99,8 +106,11 @@ export default function RecentSubmissions() {
 
       {/* Action Footer */}
       <div className="p-4 bg-gray-50 border-t border-gray-100 text-center">
-        <button className="text-[12px] font-black text-[#111827] hover:underline uppercase tracking-widest">
-          Open Grading Portal
+        <button 
+          onClick={() => router.push('/dashboard/teacher/grading')}
+          className="text-[12px] font-black text-[#111827] hover:underline uppercase tracking-widest flex items-center justify-center w-full gap-2"
+        >
+          Open Grading Queue <CaretRight size={14} weight="bold" />
         </button>
       </div>
 

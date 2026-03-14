@@ -93,14 +93,15 @@ export default function StudentProfileHeader({
         </div>
 
         {/* Educational Tabs */}
-        <div className="flex items-center gap-8 border-t border-gray-100 -mx-8 px-8">
+        <div className="flex items-center gap-8 border-t border-gray-100 -mx-8 px-8 overflow-x-auto hide-scrollbar">
+          <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
           {tabs.map((tab) => {
             const isActive = pathname === tab.path;
             return (
               <Link
                 key={tab.path}
                 href={tab.path}
-                className={`py-4 text-[13px] font-bold relative transition-colors whitespace-nowrap ${isActive ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`py-4 text-[13px] font-bold relative transition-colors whitespace-nowrap shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
               >
                 {tab.name}
                 {isActive && (

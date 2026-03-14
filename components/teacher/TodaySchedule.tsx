@@ -1,5 +1,5 @@
 "use client";
-import { Clock, Video, User, CheckCircle, Play } from "lucide-react";
+import { Clock, VideoCamera, User, CheckCircle, Play } from "@phosphor-icons/react";
 
 const SCHEDULE = [
   {
@@ -55,7 +55,7 @@ export default function TodaySchedule() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-5 shrink-0 border-b border-[#F1F5F9] bg-[#FBFBFC]">
         <div className="flex items-center gap-2.5">
-          <Clock size={18} className="text-[#0F172A]" strokeWidth={2.5} />
+          <Clock size={18} weight="bold" className="text-[#0F172A]" />
           <h2 className="text-[#0F172A] font-season font-bold text-[18px] tracking-tight">Today's Schedule</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export default function TodaySchedule() {
               </div>
               <div className="flex items-center gap-2 mt-1 min-w-0">
                 <div className="flex items-center gap-1.5 text-[11px] font-medium text-gray-400 truncate">
-                  <User size={10} />
+                  <User size={10} weight="bold" />
                   <span>{item.studentName}</span>
                 </div>
                 <span className="text-gray-200 text-[11px]">|</span>
@@ -108,12 +108,12 @@ export default function TodaySchedule() {
             <div className="flex flex-col items-end gap-2 shrink-0">
               {item.status === 'Live' ? (
                 <button className="flex items-center gap-2 text-[11.5px] text-white bg-[#0F172A] px-4 py-2 rounded-xl shadow-md hover:bg-[#1E293B] transition-all font-bold active:scale-95">
-                  <Play size={10} fill="white" />
+                  <Play size={10} weight="fill" />
                   Join
                 </button>
               ) : item.status === 'Completed' ? (
                 <div className="flex items-center gap-1.5 text-[#166534] bg-[#F0FDF4] px-3 py-1.5 rounded-full border border-[#DCFCE7] text-[11px] font-bold">
-                  <CheckCircle size={14} />
+                  <CheckCircle size={14} weight="bold" />
                   <span>Done</span>
                 </div>
               ) : (

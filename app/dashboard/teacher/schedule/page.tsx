@@ -217,23 +217,25 @@ export default function SchedulePage() {
            </div>
         </div>
 
-        {/* Days of week header */}
-        <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50/50">
-           {DAYS_OF_WEEK.map((day) => (
-              <div key={day} className="px-4 py-3 text-sm font-semibold text-gray-500 hidden md:block border-r border-gray-200 last:border-r-0">
-                 {day}
-              </div>
-           ))}
-           {/* Mobile view short days */}
-           {DAYS_OF_WEEK.map((day) => (
-              <div key={day + '-mobile'} className="px-2 py-3 text-xs justify-center font-semibold text-gray-500 flex md:hidden border-r border-gray-200 last:border-r-0 uppercase tracking-wide">
-                 {day.substring(0, 3)}
-              </div>
-           ))}
-        </div>
+        <div className="overflow-x-auto custom-scrollbar">
+          <div className="min-w-[768px] flex flex-col">
+            {/* Days of week header */}
+            <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50/50">
+               {DAYS_OF_WEEK.map((day) => (
+                  <div key={day} className="px-4 py-3 text-sm font-semibold text-gray-500 hidden md:block border-r border-gray-200 last:border-r-0">
+                     {day}
+                  </div>
+               ))}
+               {/* Mobile view short days */}
+               {DAYS_OF_WEEK.map((day) => (
+                  <div key={day + '-mobile'} className="px-2 py-3 text-xs justify-center font-semibold text-gray-500 flex md:hidden border-r border-gray-200 last:border-r-0 uppercase tracking-wide">
+                     {day.substring(0, 3)}
+                  </div>
+               ))}
+            </div>
 
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 flex-1 bg-gray-200 gap-px border-b border-gray-200">
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 flex-1 bg-gray-200 gap-px border-b border-gray-200">
            {days.map((dayObj, i) => {
               const dateEvents = getEventsForDate(dayObj.dateKey);
               
@@ -276,6 +278,8 @@ export default function SchedulePage() {
                  </div>
               );
            })}
+        </div>
+          </div>
         </div>
 
       </div>

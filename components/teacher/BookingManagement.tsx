@@ -73,6 +73,21 @@ const MOCK_BOOKINGS = [
 export default function BookingManagement() {
   const [bookings, setBookings] = useState(MOCK_BOOKINGS);
   const [filter, setFilter] = useState<"all" | "pending" | "accepted" | "rejected">("all");
+  const [showSyncModal, setShowSyncModal] = useState(false);
+  const [syncState, setSyncState] = useState<"idle" | "connecting" | "success">("idle");
+  const [syncedProvider, setSyncedProvider] = useState<string | null>(null);
+
+  const handleSync = (provider: string) => {
+    setSyncState("connecting");
+    setTimeout(() => {
+      setSyncState("success");
+      setSyncedProvider(provider);
+      setTimeout(() => {
+        setShowSyncModal(false);
+        setSyncState("idle");
+      }, 1500);
+    }, 1200);
+  };
 
   const handleAccept = (id: number) => {
     setBookings(bookings.map(b => b.id === id ? { ...b, status: "accepted" } : b));
@@ -106,9 +121,12 @@ export default function BookingManagement() {
            </h1>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-6 py-3 bg-[#111111] text-white rounded-full text-xs font-bold hover:bg-black/90 shadow-xl transition-all active:scale-95">
+          <button 
+            onClick={() => setShowSyncModal(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-[#111111] text-white rounded-full text-xs font-bold hover:bg-black/90 shadow-xl transition-all active:scale-95"
+          >
             <Calendar className="w-4 h-4" />
-            <span>Sync Calendar</span>
+            <span>{syncedProvider ? `Synced with ${syncedProvider}` : 'Sync Calendar'}</span>
           </button>
         </div>
       </div>
@@ -269,6 +287,73 @@ export default function BookingManagement() {
          </div>
 
       </div>
+
+      {/* Sync Calendar Modal */}
+      {showSyncModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+             onClick={(e) => { if (syncState === "idle") setShowSyncModal(false); }}>
+          <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-sm overflow-hidden" 
+               onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-[17px] font-bold text-[#111] font-matter">Sync Calendar</h3>
+                <p className="text-[12px] text-gray-400 font-matter mt-1">Connect your schedule automatically</p>
+              </div>
+              {syncState === "idle" && (
+                <button onClick={() => setShowSyncModal(false)} className="p-2 text-gray-400 hover:text-[#111] rounded-full hover:bg-gray-50 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="p-6">
+              {syncState === "idle" ? (
+                <div className="space-y-3">
+                  <button 
+                    onClick={() => handleSync("Google")}
+                    className="w-full flex items-center gap-4 p-4 rounded-[16px] border border-gray-200 hover:border-[#111] hover:bg-gray-50 transition-all text-left"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center shrink-0">
+                      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[14px] font-bold text-[#111] font-matter">Google Calendar</p>
+                      <p className="text-[11px] text-gray-500 font-matter">Sign in with Google</p>
+                    </div>
+                  </button>
+                  
+                  <button 
+                    onClick={() => handleSync("Outlook")}
+                    className="w-full flex items-center gap-4 p-4 rounded-[16px] border border-gray-200 hover:border-[#111] hover:bg-gray-50 transition-all text-left"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center shrink-0">
+                      <img src="https://www.svgrepo.com/show/475666/microsoft-color.svg" alt="Outlook" className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[14px] font-bold text-[#111] font-matter">Microsoft Outlook</p>
+                      <p className="text-[11px] text-gray-500 font-matter">Office 365 & Exchange</p>
+                    </div>
+                  </button>
+                </div>
+              ) : syncState === "connecting" ? (
+                <div className="py-8 flex flex-col items-center justify-center text-center">
+                  <div className="w-12 h-12 border-4 border-gray-100 border-t-[#111] rounded-full animate-spin mb-4" />
+                  <p className="text-[15px] font-bold text-[#111] font-matter">Connecting securely...</p>
+                  <p className="text-[12px] text-gray-500 mt-2 font-matter">Please wait while we authenticate your account.</p>
+                </div>
+              ) : (
+                <div className="py-8 flex flex-col items-center justify-center text-center">
+                  <div className="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center mb-4">
+                    <Check className="w-7 h-7 text-green-500" />
+                  </div>
+                  <p className="text-[16px] font-bold text-[#111] font-matter">Sync Complete!</p>
+                  <p className="text-[12px] text-gray-500 mt-2 font-matter">Your {syncedProvider} events will now appear on your dashboard.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

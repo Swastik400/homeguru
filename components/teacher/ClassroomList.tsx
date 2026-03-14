@@ -57,8 +57,8 @@ export default function ClassroomList() {
           <React.Fragment key={session.id}>
             
             {/* List Item */}
-            <div className="flex items-center justify-between py-4">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between py-4 gap-4 md:gap-0">
+              <div className="flex items-start md:items-center gap-4">
                 
                 {/* Icon Box */}
                 <div className={`w-[48px] h-[48px] rounded-full flex items-center justify-center shrink-0 ${session.status === 'live' ? 'bg-[#FDF2F2]' : 'bg-[#F2F4F8]'}`}>
@@ -66,21 +66,21 @@ export default function ClassroomList() {
                 </div>
 
                 {/* Text & Tags */}
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-[#111827] text-[16px] font-medium">
+                <div className="flex flex-col gap-1">
+                  <div className="flex flex-wrap items-center gap-2 md:gap-3">
+                    <h3 className="text-[#111827] text-[15px] md:text-[16px] font-medium leading-tight">
                       {session.title}
                     </h3>
-                    <span className={`px-2 py-0.5 rounded-[4px] text-[11px] tracking-wide font-bold uppercase ${session.tagColor}`}>
+                    <span className={`px-2 py-0.5 rounded-[4px] text-[10px] md:text-[11px] tracking-wide font-bold uppercase whitespace-nowrap ${session.tagColor}`}>
                       {session.tagText}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 text-[#8B92A5] text-[14px] mt-0.5">
-                    <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-3 md:gap-4 text-[#8B92A5] text-[13px] md:text-[14px] mt-0.5">
+                    <div className="flex items-center gap-1.5 whitespace-nowrap">
                        <User size={14} />
                        {session.student}
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 whitespace-nowrap">
                        <Clock size={14} />
                        {session.time}
                     </div>
@@ -89,15 +89,15 @@ export default function ClassroomList() {
               </div>
 
               {/* Action Button */}
-              <div className="flex items-center gap-3">
-                <button className={`px-6 py-2 rounded-[10px] text-[14px] font-bold shadow-sm transition-all ${
+              <div className="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0">
+                <button className={`flex-1 md:flex-none px-6 py-2 rounded-[10px] text-[14px] font-bold shadow-sm transition-all whitespace-nowrap ${
                   session.status === 'live' 
                     ? 'bg-[#111827] text-white hover:bg-black' 
                     : 'bg-white border border-gray-200 text-[#111827] hover:bg-gray-50'
                 }`}>
                   {session.status === 'live' ? 'Join Now' : 'Prepare'}
                 </button>
-                <button className="text-gray-300 hover:text-gray-600 transition-colors">
+                <button className="text-gray-300 hover:text-gray-600 transition-colors p-2">
                   <MoreHorizontal size={20} />
                 </button>
               </div>

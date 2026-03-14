@@ -112,7 +112,7 @@ export default function StudentOverview() {
             </button>
           </div>
 
-          <div className="flex items-center gap-3 bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 rounded-xl shadow-inner w-[280px]">
+          <div className="flex items-center gap-3 bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 rounded-xl shadow-inner w-full sm:w-[280px]">
             <Search size={14} strokeWidth={2.5} className="text-[#94A3B8]" />
             <input
               type="text"
@@ -207,16 +207,16 @@ export default function StudentOverview() {
         </div>
 
         {/* Improved Footer */}
-        <div className="px-10 py-6 bg-[#FBFBFC] border-t border-[#F1F5F9] flex items-center justify-between">
-          <div className="flex items-center gap-6">
+        <div className="px-6 md:px-10 py-6 bg-[#FBFBFC] border-t border-[#F1F5F9] flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-center sm:text-left">
             <span className="text-[13px] font-semibold text-[#64748B]">Showing <span className="text-[#0F172A] font-bold">5</span> of <span className="text-[#0F172A] font-bold">48</span> Students</span>
-            <div className="h-5 w-px bg-[#E2E8F0]"></div>
+            <div className="hidden sm:block h-5 w-px bg-[#E2E8F0]"></div>
             <div className="flex items-center gap-2 bg-[#FEF2F2] px-3 py-1.5 rounded-full border border-[#FEE2E2] shadow-sm">
               <div className="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse"></div>
-              <span className="text-[11px] font-bold text-[#991B1B] uppercase tracking-wider">2 Flagged for Attention</span>
+              <span className="text-[11px] font-bold text-[#991B1B] uppercase tracking-wider whitespace-nowrap">2 Flagged for Attention</span>
             </div>
           </div>
-          <button className="flex items-center gap-2.5 px-6 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[12.5px] font-bold text-[#0F172A] hover:bg-[#F8FAFC] transition-all shadow-sm active:scale-95">
+          <button className="w-full md:w-auto flex items-center justify-center gap-2.5 px-6 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[12.5px] font-bold text-[#0F172A] hover:bg-[#F8FAFC] transition-all shadow-sm active:scale-95 mt-2 md:mt-0">
             Open Full Management
           </button>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 import { useState, memo } from "react";
 import Image from "next/image";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 const slides = [
   {
@@ -112,18 +113,7 @@ export default memo(function TeacherBanner() {
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = slides[activeSlide].navButtonHover}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = slides[activeSlide].navButtonBg}
         >
-          <svg 
-            width="12" 
-            height="12" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke={slides[activeSlide].navButtonIcon}
-            strokeWidth="2.5" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
+          <CaretLeft size={12} weight="bold" color={slides[activeSlide].navButtonIcon} />
         </button>
 
         {/* Next Button */}
@@ -137,18 +127,7 @@ export default memo(function TeacherBanner() {
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = slides[activeSlide].navButtonHover}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = slides[activeSlide].navButtonBg}
         >
-          <svg 
-            width="12" 
-            height="12" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke={slides[activeSlide].navButtonIcon}
-            strokeWidth="2.5" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
+          <CaretRight size={12} weight="bold" color={slides[activeSlide].navButtonIcon} />
         </button>
       </div>
     </div>

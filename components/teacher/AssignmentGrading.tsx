@@ -1,505 +1,532 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
-  Filter,
+  Plus,
+  Download,
   Search,
-  Calendar,
-  TrendingUp,
-  MoreVertical,
-  ChevronRight,
-  Zap,
-  FileCheck,
-  ShieldCheck,
+  Filter,
+  ChevronDown,
+  MoreHorizontal,
+  Eye,
+  CheckCircle,
+  Clock,
+  FileText,
+  Users,
+  BarChart3,
+  Copy,
+  Trash2,
+  X,
+  Send,
 } from "lucide-react";
 
-const MOCK_ASSIGNMENTS = [
+const INITIAL_ASSIGNMENTS = [
   {
     id: 1,
     title: "Calculus Problem Set 1",
     course: "Advanced Mathematics",
     dueDate: "20 Mar 2026",
-    totalSubmissions: 12,
+    total: 12,
     graded: 8,
     pending: 4,
-    status: "Active",
+    status: "active",
     avgGrade: 82,
+    late: 1,
   },
   {
     id: 2,
     title: "Physics Lab Report",
     course: "Physics Fundamentals",
     dueDate: "18 Mar 2026",
-    totalSubmissions: 48,
+    total: 48,
     graded: 48,
     pending: 0,
-    status: "Closed",
+    status: "closed",
     avgGrade: 76,
+    late: 3,
   },
   {
     id: 3,
     title: "Linear Algebra Quiz",
     course: "Matrix Theory",
     dueDate: "25 Mar 2026",
-    totalSubmissions: 4,
+    total: 4,
     graded: 1,
     pending: 3,
-    status: "Active",
+    status: "active",
     avgGrade: 91,
+    late: 0,
+  },
+  {
+    id: 4,
+    title: "English Comprehension Essay",
+    course: "English Literature",
+    dueDate: "28 Mar 2026",
+    total: 22,
+    graded: 0,
+    pending: 22,
+    status: "draft",
+    avgGrade: 0,
+    late: 0,
+  },
+  {
+    id: 5,
+    title: "Organic Chemistry Worksheet",
+    course: "Chemistry Advanced",
+    dueDate: "22 Mar 2026",
+    total: 15,
+    graded: 15,
+    pending: 0,
+    status: "closed",
+    avgGrade: 88,
+    late: 2,
   },
 ];
 
-const MOCK_SUBMISSIONS = [
-  {
-    id: 1,
-    assignmentId: 1,
-    studentName: "Sarah Johnson",
-    studentImage: "https://i.pravatar.cc/150?img=5",
-    submittedAt: "15 Mar, 10:30 AM",
-    status: "Pending",
-    grade: null as number | null,
-  },
-  {
-    id: 2,
-    assignmentId: 1,
-    studentName: "Michael Chen",
-    studentImage: "https://i.pravatar.cc/150?img=8",
-    submittedAt: "14 Mar, 3:45 PM",
-    status: "Graded",
-    grade: 85,
-  },
-  {
-    id: 3,
-    assignmentId: 1,
-    studentName: "Emma Wilson",
-    studentImage: "https://i.pravatar.cc/150?img=9",
-    submittedAt: "16 Mar, 9:15 AM",
-    status: "Pending",
-    grade: null as number | null,
-  },
+const EMPTY_FORM = { title: "", course: "", dueDate: "", status: "draft" as const };
+
+const INITIAL_SUBMISSIONS = [
+  { id: 1, name: "Sarah Johnson", avatar: "https://i.pravatar.cc/150?img=5", assignment: "Calculus Problem Set 1", time: "2h ago", status: "pending", grade: null as number | null },
+  { id: 2, name: "Michael Chen", avatar: "https://i.pravatar.cc/150?img=8", assignment: "Calculus Problem Set 1", time: "5h ago", status: "graded", grade: 85 },
+  { id: 3, name: "Emma Wilson", avatar: "https://i.pravatar.cc/150?img=9", assignment: "Linear Algebra Quiz", time: "1d ago", status: "pending", grade: null },
+  { id: 4, name: "Rahul Verma", avatar: "https://i.pravatar.cc/150?img=11", assignment: "Physics Lab Report", time: "3h ago", status: "late", grade: null },
 ];
 
-function ProgressRing({
-  percentage,
-  size = 44,
-  strokeWidth = 3,
-}: {
-  percentage: number;
-  size?: number;
-  strokeWidth?: number;
-}) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (percentage / 100) * circumference;
+const statusStyle: Record<string, string> = {
+  active: "bg-gray-900 text-white",
+  closed: "bg-gray-100 text-gray-500",
+  draft: "bg-white text-gray-400 border border-dashed border-gray-300",
+};
 
-  return (
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
-        <circle
-          className="text-gray-100"
-          strokeWidth={strokeWidth}
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
-          cx={size / 2}
-          cy={size / 2}
-        />
-        <circle
-          className="text-black transition-all duration-1000 ease-out"
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
-          cx={size / 2}
-          cy={size / 2}
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-[10px] font-black">{percentage}%</span>
-      </div>
-    </div>
-  );
-}
+const submissionStatusStyle: Record<string, string> = {
+  pending: "bg-gray-100 text-gray-600",
+  graded: "bg-gray-800 text-white",
+  late: "bg-gray-200 text-gray-600",
+};
 
 export default function AssignmentGrading() {
-  const [activeTab, setActiveTab] = useState<"assignments" | "submissions">(
-    "assignments"
-  );
-  const [selectedAssignment, setSelectedAssignment] = useState<number | null>(
-    null
-  );
-  const [searchTerm, setSearchTerm] = useState("");
+  const [assignments, setAssignments] = useState(INITIAL_ASSIGNMENTS);
+  const [search, setSearch] = useState("");
+  const [tab, setTab] = useState<"all" | "active" | "closed" | "draft">("all");
+  const [contextMenu, setContextMenu] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [submissions, setSubmissions] = useState(INITIAL_SUBMISSIONS);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "info" } | null>(null);
 
-  const filteredAssignments = MOCK_ASSIGNMENTS.filter((a) =>
-    a.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const showToast = useCallback((message: string, type: "success" | "info" = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
 
-  const filteredSubmissions = selectedAssignment
-    ? MOCK_SUBMISSIONS.filter((s) => s.assignmentId === selectedAssignment)
-    : MOCK_SUBMISSIONS;
+  const filtered = assignments.filter((a) => {
+    const matchSearch = a.title.toLowerCase().includes(search.toLowerCase());
+    const matchTab = tab === "all" || a.status === tab;
+    return matchSearch && matchTab;
+  });
+
+  const totalPending = assignments.reduce((s, a) => s + a.pending, 0);
+  const totalGraded = assignments.reduce((s, a) => s + a.graded, 0);
+  const withGrades = assignments.filter((a) => a.avgGrade > 0);
+  const avgGrade = withGrades.length
+    ? Math.round(withGrades.reduce((s, a) => s + a.avgGrade, 0) / withGrades.length)
+    : 0;
+
+  const handleBatchGrade = () => {
+    const pendingCount = submissions.filter((s) => s.status === "pending" || s.status === "late").length;
+    if (pendingCount === 0) { showToast("No pending submissions to grade.", "info"); return; }
+    setSubmissions((prev) =>
+      prev.map((s) =>
+        s.status === "pending" || s.status === "late"
+          ? { ...s, status: "graded", grade: Math.floor(Math.random() * 31) + 70 }
+          : s
+      )
+    );
+    setAssignments((prev) =>
+      prev.map((a) => a.pending > 0 ? { ...a, graded: a.graded + a.pending, pending: 0 } : a)
+    );
+    showToast(`Batch graded ${pendingCount} submissions.`);
+  };
+
+  const handleSendReminders = () => {
+    const pendingSubs = submissions.filter((s) => s.status === "pending" || s.status === "late");
+    if (pendingSubs.length === 0) { showToast("No pending students to remind.", "info"); return; }
+    showToast(`Reminders sent to ${pendingSubs.length} student${pendingSubs.length > 1 ? "s" : ""}.`);
+  };
+
+  const handleGenerateReport = () => {
+    const headers = ["Assignment", "Course", "Due Date", "Total", "Graded", "Pending", "Avg Grade", "Status"];
+    const rows = assignments.map((a) =>
+      [a.title, a.course, a.dueDate, a.total, a.graded, a.pending, a.avgGrade > 0 ? `${a.avgGrade}%` : "N/A", a.status].join(",")
+    );
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "assignment_report.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("Report downloaded as CSV.");
+  };
+
+  const quickActions = [
+    { label: "Batch grade pending", desc: `${submissions.filter((s) => s.status === "pending" || s.status === "late").length} submissions ready`, icon: CheckCircle, handler: handleBatchGrade },
+    { label: "Send reminders", desc: `${submissions.filter((s) => s.status === "pending" || s.status === "late").length} students haven't submitted`, icon: Send, handler: handleSendReminders },
+    { label: "Generate report", desc: "Export class analytics", icon: BarChart3, handler: handleGenerateReport },
+  ];
+
+  const handleCreate = () => {
+    if (!form.title.trim() || !form.course.trim() || !form.dueDate) return;
+    const d = new Date(form.dueDate);
+    const formatted = `${d.getDate()} ${d.toLocaleString("en", { month: "short" })} ${d.getFullYear()}`;
+    setAssignments((prev) => [
+      {
+        id: Math.max(...prev.map((a) => a.id)) + 1,
+        title: form.title.trim(),
+        course: form.course.trim(),
+        dueDate: formatted,
+        total: 0,
+        graded: 0,
+        pending: 0,
+        status: form.status,
+        avgGrade: 0,
+        late: 0,
+      },
+      ...prev,
+    ]);
+    setForm(EMPTY_FORM);
+    setShowModal(false);
+  };
 
   return (
-    <div className="space-y-10">
-      {/* Search & Filter Bar */}
-      <div className="bg-white p-4 rounded-[32px] border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto">
-          <button className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-black rounded-full text-xs font-bold border border-gray-100 shadow-sm">
-            <Filter className="w-3.5 h-3.5" />
-            <span>Scope</span>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">
+            Assignments
+          </h1>
+          <p className="text-gray-400 text-[13px] mt-0.5">
+            Create, manage, and grade all coursework in one place.
+          </p>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-xl text-[12px] font-semibold hover:bg-gray-50 transition-all">
+            <Download size={14} />
+            Export
           </button>
-          <div className="flex items-center gap-6 px-4">
-            {["Coursework", "Exam Papers", "Practical"].map((opt) => (
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-[12px] font-semibold hover:bg-black transition-all"
+          >
+            <Plus size={14} />
+            New Assignment
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Strip */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: "Total Assignments", value: assignments.length, icon: FileText, change: null },
+          { label: "Pending Grades", value: totalPending, icon: Clock, change: "+3 today" },
+          { label: "Graded", value: totalGraded, icon: CheckCircle, change: null },
+          { label: "Avg. Grade", value: `${avgGrade}%`, icon: BarChart3, change: "+2.4%" },
+        ].map((s, i) => (
+          <div key={i} className="bg-white border border-gray-200 rounded-2xl p-5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
+              <s.icon size={18} className="text-gray-500" />
+            </div>
+            <div>
+              <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wide">{s.label}</p>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-[20px] font-bold text-gray-900 leading-tight">{s.value}</span>
+                {s.change && (
+                  <span className="text-[10px] font-semibold text-gray-400">{s.change}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        {/* Main Table */}
+        <div className="xl:col-span-8 space-y-4">
+          {/* Toolbar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+              {(["all", "active", "closed", "draft"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={`px-3.5 py-1.5 rounded-lg text-[12px] font-semibold capitalize transition-all ${
+                    tab === t ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-2.5">
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300" />
+                <input
+                  type="text"
+                  placeholder="Search assignments..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-[12px] w-[200px] outline-none focus:border-gray-400 transition-colors"
+                />
+              </div>
+              <button className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-xl text-[12px] font-medium text-gray-500 hover:bg-gray-50">
+                <Filter size={13} />
+                Filter
+              </button>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left min-w-[700px]">
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th className="py-3.5 pl-6 pr-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Assignment</th>
+                    <th className="py-3.5 px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Due</th>
+                    <th className="py-3.5 px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Progress</th>
+                    <th className="py-3.5 px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Avg</th>
+                    <th className="py-3.5 px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                    <th className="py-3.5 pr-6 pl-4 text-center text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {filtered.map((a) => {
+                    const progress = a.total > 0 ? Math.round((a.graded / a.total) * 100) : 0;
+                    return (
+                      <tr key={a.id} className="hover:bg-gray-50/60 transition-colors group">
+                        <td className="py-4 pl-6 pr-4">
+                          <div>
+                            <p className="text-[13px] font-semibold text-gray-900 group-hover:text-black">{a.title}</p>
+                            <p className="text-[11px] text-gray-400 mt-0.5">{a.course}</p>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <span className="text-[12px] text-gray-600 font-medium">{a.dueDate}</span>
+                          {a.late > 0 && (
+                            <p className="text-[10px] text-gray-400 mt-0.5">{a.late} late</p>
+                          )}
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between w-[100px]">
+                              <span className="text-[12px] font-semibold text-gray-700">{a.graded}/{a.total}</span>
+                              <span className="text-[10px] text-gray-400">{progress}%</span>
+                            </div>
+                            <div className="w-[100px] bg-gray-100 rounded-full h-1">
+                              <div
+                                className="h-1 rounded-full bg-gray-700 transition-all"
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <span className="text-[14px] font-bold text-gray-900">
+                            {a.avgGrade > 0 ? `${a.avgGrade}%` : "—"}
+                          </span>
+                        </td>
+                        <td className="py-4 px-4">
+                          <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${statusStyle[a.status]}`}>
+                            {a.status}
+                          </span>
+                        </td>
+                        <td className="py-4 pr-6 pl-4">
+                          <div className="flex items-center justify-center gap-1 relative">
+                            <button title="View" className="p-2 text-gray-300 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
+                              <Eye size={15} />
+                            </button>
+                            <button
+                              title="More"
+                              onClick={() => setContextMenu(contextMenu === a.id ? null : a.id)}
+                              className="p-2 text-gray-300 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+                            >
+                              <MoreHorizontal size={15} />
+                            </button>
+                            {contextMenu === a.id && (
+                              <div className="absolute right-0 top-10 z-50 bg-white border border-gray-200 rounded-xl shadow-lg py-1.5 w-36">
+                                <button className="w-full flex items-center gap-2 px-3.5 py-2 text-[12px] text-gray-600 hover:bg-gray-50">
+                                  <Copy size={13} /> Duplicate
+                                </button>
+                                <button className="w-full flex items-center gap-2 px-3.5 py-2 text-[12px] text-gray-600 hover:bg-gray-50">
+                                  <Download size={13} /> Export CSV
+                                </button>
+                                <button className="w-full flex items-center gap-2 px-3.5 py-2 text-[12px] text-gray-400 hover:bg-gray-50">
+                                  <Trash2 size={13} /> Delete
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Table Footer */}
+            <div className="px-6 py-3.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+              <span className="text-[11px] text-gray-400 font-medium">
+                Showing <span className="text-gray-700 font-semibold">{filtered.length}</span> of {assignments.length}
+              </span>
+              <button className="text-[11px] font-semibold text-gray-500 hover:text-gray-900 transition-colors">
+                View All →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="xl:col-span-4 space-y-5">
+          {/* Recent Submissions */}
+          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Users size={15} className="text-gray-400" />
+                <h3 className="text-[14px] font-bold text-gray-900">Recent Submissions</h3>
+              </div>
+              <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-md">
+                {submissions.filter((s) => s.status === "pending").length} pending
+              </span>
+            </div>
+            <div className="divide-y divide-gray-50">
+              {submissions.map((s) => (
+                <div key={s.id} className="px-5 py-3.5 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <img src={s.avatar} alt={s.name} className="w-8 h-8 rounded-full border border-gray-100 object-cover" />
+                    <div>
+                      <p className="text-[12px] font-semibold text-gray-900">{s.name}</p>
+                      <p className="text-[10px] text-gray-400">{s.assignment} · {s.time}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {s.grade !== null ? (
+                      <span className="text-[12px] font-bold text-gray-900">{s.grade}%</span>
+                    ) : (
+                      <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider ${submissionStatusStyle[s.status]}`}>
+                        {s.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 text-center">
+              <button className="text-[11px] font-semibold text-gray-500 hover:text-gray-900 transition-colors">
+                Open Grading Queue →
+              </button>
+            </div>
+          </div>
+
+
+          {/* Quick Actions */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-3">
+            <h3 className="text-[13px] font-bold text-gray-900 mb-1">Quick Actions</h3>
+            {quickActions.map((action, i) => (
               <button
-                key={opt}
-                className="text-xs font-bold text-gray-400 hover:text-black transition-colors whitespace-nowrap"
+                key={i}
+                onClick={action.handler}
+                className="w-full flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50 transition-all text-left"
               >
-                {opt}
+                <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                  <action.icon size={14} className="text-gray-500" />
+                </div>
+                <div>
+                  <p className="text-[12px] font-semibold text-gray-800">{action.label}</p>
+                  <p className="text-[10px] text-gray-400">{action.desc}</p>
+                </div>
               </button>
             ))}
           </div>
         </div>
-        <div className="relative w-full md:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300" />
-          <input
-            type="text"
-            placeholder="Search curricula..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-full text-xs focus:ring-2 focus:ring-black/5 outline-none"
-          />
-        </div>
       </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-        {/* Main Content */}
-        <div className="xl:col-span-8 space-y-6">
-          <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-6">
-              {[
-                { id: "assignments" as const, label: "Assignment Grid" },
-                { id: "submissions" as const, label: "Pipeline" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`text-xs font-black uppercase tracking-widest transition-all ${
-                    activeTab === tab.id
-                      ? "text-black"
-                      : "text-gray-300 hover:text-gray-500"
-                  }`}
-                >
-                  {tab.label}
-                  {activeTab === tab.id && (
-                    <div className="h-0.5 bg-black rounded-full mt-1.5 w-1/2" />
-                  )}
-                </button>
-              ))}
-            </div>
-            <span className="text-[10px] font-black text-gray-200 uppercase tracking-[.2em]">
-              Live Registry
-            </span>
-          </div>
-
-          {activeTab === "assignments" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredAssignments.map((assignment) => (
-                <div
-                  key={assignment.id}
-                  className="bg-white rounded-[24px] p-6 border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] group hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-500"
-                >
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span
-                          className={`w-2 h-2 rounded-full ${
-                            assignment.status === "Active"
-                              ? "bg-green-500 animate-pulse"
-                              : "bg-gray-300"
-                          }`}
-                        />
-                        <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">
-                          {assignment.status}
-                        </span>
-                      </div>
-                      <h3 className="text-base font-season font-bold text-[#111111] leading-tight group-hover:text-blue-600 transition-colors">
-                        {assignment.title}
-                      </h3>
-                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide mt-1">
-                        {assignment.course}
-                      </p>
-                    </div>
-                    <ProgressRing
-                      percentage={Math.round(
-                        (assignment.graded / assignment.totalSubmissions) * 100
-                      )}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 mb-6">
-                    <div className="bg-gray-50/50 p-3 rounded-2xl border border-gray-50">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Calendar size={12} className="text-gray-400" />
-                        <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest">
-                          Due Date
-                        </span>
-                      </div>
-                      <p className="text-[11px] font-bold text-[#111111]">
-                        {assignment.dueDate}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50/50 p-3 rounded-2xl border border-gray-50">
-                      <div className="flex items-center gap-2 mb-1">
-                        <TrendingUp size={12} className="text-gray-400" />
-                        <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest">
-                          Avg Grade
-                        </span>
-                      </div>
-                      <p className="text-[11px] font-bold text-[#111111]">
-                        {assignment.avgGrade}%
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                    <div className="flex -space-x-2">
-                      {[1, 2, 3].map((i) => (
-                        <img
-                          key={i}
-                          src={`https://i.pravatar.cc/150?u=${assignment.id + i}`}
-                          className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
-                          alt=""
-                        />
-                      ))}
-                      <div className="w-6 h-6 rounded-full bg-gray-50 border-2 border-white flex items-center justify-center text-[8px] font-black text-gray-400">
-                        +{assignment.totalSubmissions - 3}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-300 hover:text-black hover:bg-gray-100 rounded-full transition-all">
-                        <MoreVertical size={14} />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedAssignment(assignment.id);
-                          setActiveTab("submissions");
-                        }}
-                        className="px-5 py-2 bg-black text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all"
-                      >
-                        Manage
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white rounded-[32px] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
-              <div className="p-8 border-b border-gray-50 bg-gray-50/20">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-season font-bold text-[#111111]">
-                      Submission Pipeline
-                    </h3>
-                    <p className="text-[11px] text-gray-400 mt-0.5">
-                      Real-time grading assessment for{" "}
-                      {selectedAssignment
-                        ? "selected item"
-                        : "all active items"}
-                      .
-                    </p>
-                  </div>
-                  {selectedAssignment && (
-                    <button
-                      onClick={() => setSelectedAssignment(null)}
-                      className="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:underline"
-                    >
-                      Clear Filter
-                    </button>
-                  )}
-                </div>
-              </div>
-              <div className="divide-y divide-gray-50">
-                {filteredSubmissions.map((sub) => (
-                  <div
-                    key={sub.id}
-                    className="p-5 flex items-center justify-between group hover:bg-gray-50/50 transition-all"
-                  >
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={sub.studentImage}
-                        className="w-9 h-9 rounded-full border border-gray-100 object-cover"
-                        alt=""
-                      />
-                      <div>
-                        <p className="text-[13px] font-bold text-[#111111]">
-                          {sub.studentName}
-                        </p>
-                        <p className="text-[10px] text-gray-400 font-medium">
-                          Submitted {sub.submittedAt}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <div className="hidden md:flex flex-col items-end">
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border ${
-                            sub.status === "Graded"
-                              ? "bg-green-50 text-green-600 border-green-100"
-                              : "bg-amber-50 text-amber-600 border-amber-100"
-                          }`}
-                        >
-                          {sub.status}
-                        </span>
-                      </div>
-                      <div className="w-[80px] text-right">
-                        <span
-                          className={`text-[13px] font-black ${
-                            sub.grade ? "text-black" : "text-gray-200"
-                          }`}
-                        >
-                          {sub.grade ? `${sub.grade}%` : "\u2014"}
-                        </span>
-                      </div>
-                      <button className="p-2.5 bg-gray-50 text-gray-400 hover:text-black hover:bg-gray-100 rounded-full transition-all">
-                        <ChevronRight size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="p-6 bg-gray-50/30 text-center">
-                <button className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-black">
-                  Load Full Pipeline
-                </button>
-              </div>
-            </div>
-          )}
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-lg text-[13px] font-semibold transition-all animate-[slideUp_0.3s_ease-out] ${
+          toast.type === "success" ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200"
+        }`}>
+          {toast.type === "success" ? <CheckCircle size={16} /> : <Clock size={16} />}
+          {toast.message}
+          <button onClick={() => setToast(null)} className="ml-2 opacity-60 hover:opacity-100"><X size={14} /></button>
         </div>
+      )}
 
-        {/* Sidebar */}
-        <div className="xl:col-span-4 space-y-6">
-          <div className="flex items-start justify-between">
-            <div className="w-8 h-8 rounded-xl bg-black flex items-center justify-center shadow-lg shadow-black/20">
-              <Zap className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-[9px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md uppercase tracking-wider border border-amber-100">
-              grading assist
-            </span>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-base font-season font-bold text-[#111111]">
-                Osmium Engine
-              </h3>
-              <p className="text-[11px] text-gray-400 mt-0.5">
-                AI-powered document analysis and score forecasting.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 group hover:bg-blue-50 transition-colors">
-                <div className="flex items-center gap-2.5 mb-2.5">
-                  <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center border border-blue-100 shadow-sm">
-                    <FileCheck size={14} className="text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-blue-900 leading-tight">
-                      Batch Analysis
-                    </p>
-                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest">
-                      4 Ready
-                    </p>
-                  </div>
-                </div>
-                <p className="text-[11px] text-blue-800/70 font-medium leading-tight">
-                  Osmium has finalized grading drafts for the latest Calculus
-                  submissions.
-                </p>
-                <button className="mt-3 w-full py-2 bg-white text-blue-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-blue-200 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all active:scale-95">
-                  Review AI Drafts
-                </button>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">
-                    Integrity Alert
-                  </span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                </div>
-                <p className="text-[12px] text-amber-900 font-bold leading-tight">
-                  Verify Step-by-Step Logic
-                </p>
-                <p className="text-[10px] text-amber-600 mt-0.5 font-medium">
-                  Potential citation issues detected in 2 reports.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Performance Summary */}
-          <div className="bg-[#111111] rounded-2xl p-6 text-white relative overflow-hidden group">
-            <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-white/5 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-1000" />
-            <h3 className="text-lg font-season font-bold mb-5 relative z-10">
-              Analytics Pulse
-            </h3>
-            <div className="space-y-5 relative z-10">
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="text-3xl font-season font-bold tracking-tight">
-                    84.2%
-                  </p>
-                  <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mt-1">
-                    Class Average Grade
-                  </p>
-                </div>
-                <div className="flex items-center gap-1.5 text-green-400 text-[10px] font-bold mb-1">
-                  <TrendingUp size={14} />
-                  <span>+2.4%</span>
-                </div>
-              </div>
-
-              <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)] transition-all duration-1000"
-                  style={{ width: "84%" }}
+      {/* New Assignment Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40" onClick={() => setShowModal(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-[18px] font-bold text-gray-900 mb-5">New Assignment</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[12px] font-semibold text-gray-500 mb-1">Title</label>
+                <input
+                  type="text"
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  placeholder="e.g. Calculus Problem Set 2"
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-[13px] outline-none focus:border-gray-400 transition-colors"
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <div className="p-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-                  <p className="text-[9px] text-white/30 uppercase font-black tracking-widest">
-                    Highest
-                  </p>
-                  <p className="text-sm font-bold mt-1 tracking-tight">
-                    98%{" "}
-                    <span className="text-[9px] font-medium text-white/40 ml-1">
-                      S. Johnson
-                    </span>
-                  </p>
-                </div>
-                <div className="p-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-                  <p className="text-[9px] text-white/30 uppercase font-black tracking-widest">
-                    Volume
-                  </p>
-                  <p className="text-sm font-bold mt-1 tracking-tight">
-                    164{" "}
-                    <span className="text-[9px] font-medium text-white/40 ml-1">
-                      Pages
-                    </span>
-                  </p>
-                </div>
+              <div>
+                <label className="block text-[12px] font-semibold text-gray-500 mb-1">Course</label>
+                <input
+                  type="text"
+                  value={form.course}
+                  onChange={(e) => setForm({ ...form, course: e.target.value })}
+                  placeholder="e.g. Advanced Mathematics"
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-[13px] outline-none focus:border-gray-400 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-[12px] font-semibold text-gray-500 mb-1">Due Date</label>
+                <input
+                  type="date"
+                  value={form.dueDate}
+                  onChange={(e) => setForm({ ...form, dueDate: e.target.value })}
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-[13px] outline-none focus:border-gray-400 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-[12px] font-semibold text-gray-500 mb-1">Status</label>
+                <select
+                  value={form.status}
+                  onChange={(e) => setForm({ ...form, status: e.target.value as "draft" | "active" })}
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-[13px] outline-none focus:border-gray-400 transition-colors bg-white"
+                >
+                  <option value="draft">Draft</option>
+                  <option value="active">Active</option>
+                </select>
               </div>
             </div>
-            <button className="mt-6 w-full py-3.5 bg-white text-[#111111] rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-gray-100 transition-all active:scale-95 shadow-xl">
-              Detailed Breakdown
-            </button>
+            <div className="flex items-center justify-end gap-2.5 mt-6">
+              <button
+                onClick={() => { setShowModal(false); setForm(EMPTY_FORM); }}
+                className="px-4 py-2.5 border border-gray-200 rounded-xl text-[12px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreate}
+                disabled={!form.title.trim() || !form.course.trim() || !form.dueDate}
+                className="px-4 py-2.5 bg-gray-900 text-white rounded-xl text-[12px] font-semibold hover:bg-black transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Create Assignment
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
