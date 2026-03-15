@@ -1,6 +1,6 @@
 "use client";
 import { useState, memo, useEffect, useRef } from "react";
-import { MagnifyingGlass, Bell, VideoCamera, Plus, CalendarBlank, CheckCircle, Clock, Info, X, DotsThreeVertical } from "@phosphor-icons/react";
+import { MagnifyingGlass, Bell, VideoCamera, Plus, CalendarBlank, CheckCircle, Clock, Info, X, DotsThreeVertical, Star, Coins } from "@phosphor-icons/react";
 
 const NOTIFICATIONS = [
   {
@@ -211,18 +211,23 @@ export default memo(function TeacherHeader() {
           )}
         </div>
 
-        {/* Status Toggle */}
-        <div 
-          onClick={() => setIsOnline(!isOnline)}
-          className={`hidden sm:flex rounded-full items-center gap-2 cursor-pointer transition-all ${
-            isOnline ? 'bg-[#F0FDF4] border-[#DCFCE7]' : 'bg-white border-[#DCDCDC]'
-          }`}
-          style={{ width: '80px', height: '36px', border: '1px solid', paddingLeft: '12px', paddingRight: '12px' }}
-        >
-          <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-[#22C55E] animate-pulse' : 'bg-[#94A3B8]'}`}></div>
-          <span className={`text-[13px] font-semibold ${isOnline ? 'text-[#166534]' : 'text-[#64748B]'}`}>
-            {isOnline ? 'Active' : 'Offline'}
-          </span>
+        {/* Credit/Score Indicator */}
+        <div className="hidden sm:flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-black/[0.03] border border-black/5 rounded-full hover:bg-black/5 transition-all cursor-pointer group">
+            <Star size={14} weight="fill" className="text-amber-500 group-hover:scale-110 transition-transform" />
+            <div className="flex flex-col leading-none">
+              <span className="text-[10px] font-black uppercase tracking-tighter text-black">850</span>
+              <span className="text-[7px] font-bold uppercase tracking-widest text-gray-400">Score</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-black/[0.03] border border-black/5 rounded-full hover:bg-black/5 transition-all cursor-pointer group">
+            <Coins size={14} weight="fill" className="text-blue-500 group-hover:scale-110 transition-transform" />
+            <div className="flex flex-col leading-none">
+              <span className="text-[10px] font-black uppercase tracking-tighter text-black">₹1,200</span>
+              <span className="text-[7px] font-bold uppercase tracking-widest text-gray-400">Credit</span>
+            </div>
+          </div>
         </div>
 
         {/* Calendar/Date */}

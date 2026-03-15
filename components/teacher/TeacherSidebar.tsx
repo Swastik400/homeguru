@@ -19,6 +19,8 @@ import {
   UserCircle, 
   Fingerprint, 
   Gear,
+  Gift,
+  Megaphone,
   User as UserIcon,
   CaretLeft,
   CaretRight,
@@ -89,7 +91,8 @@ function TeacherSidebar({ isOpen, setIsOpen }: TeacherSidebarProps) {
     {
       label: 'BUSINESS',
       items: [
-        { name: 'Payments', href: '/dashboard/teacher/payments', icon: <Wallet size={18} weight="regular" /> },
+        { name: 'Earnings & Payouts', href: '/dashboard/teacher/earnings', icon: <Wallet size={18} weight="regular" /> },
+        { name: 'Referral & Rewards', href: '/dashboard/teacher/referrals', icon: <Gift size={18} weight="regular" /> },
         { name: 'Bookings', href: '/dashboard/teacher/bookings', icon: <CalendarCheck size={18} weight="regular" /> },
         { name: 'Ratings & Reviews', href: '/dashboard/teacher/reviews', icon: <Star size={18} weight="regular" /> },
       ],
