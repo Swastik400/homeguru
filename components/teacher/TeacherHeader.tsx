@@ -1,6 +1,7 @@
 "use client";
 import { useState, memo, useEffect, useRef } from "react";
-import { MagnifyingGlass, Bell, VideoCamera, Plus, CalendarBlank, CheckCircle, Clock, Info, X, DotsThreeVertical, Star, Coins } from "@phosphor-icons/react";
+import { MagnifyingGlass, Bell, VideoCamera, Plus, CalendarBlank, CheckCircle, Clock, Info, X, DotsThreeVertical, Lightning } from "@phosphor-icons/react";
+import Link from "next/link";
 
 const NOTIFICATIONS = [
   {
@@ -211,24 +212,14 @@ export default memo(function TeacherHeader() {
           )}
         </div>
 
-        {/* Credit/Score Indicator */}
-        <div className="hidden sm:flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-black/[0.03] border border-black/5 rounded-full hover:bg-black/5 transition-all cursor-pointer group">
-            <Star size={14} weight="fill" className="text-amber-500 group-hover:scale-110 transition-transform" />
-            <div className="flex flex-col leading-none">
-              <span className="text-[10px] font-black uppercase tracking-tighter text-black">850</span>
-              <span className="text-[7px] font-bold uppercase tracking-widest text-gray-400">Score</span>
-            </div>
+        {/* XP Indicator */}
+        <Link href="/dashboard/teacher/referrals" className="hidden sm:flex items-center">
+          <div className="flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#E5E7EB] rounded-full hover:bg-gray-50 transition-all cursor-pointer group shadow-sm">
+            <Lightning size={16} weight="fill" className="text-amber-500 group-hover:scale-110 transition-transform" />
+            <span className="text-[14px] font-bold text-[#1a202c] tabular-nums">0</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">XP</span>
           </div>
-          
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-black/[0.03] border border-black/5 rounded-full hover:bg-black/5 transition-all cursor-pointer group">
-            <Coins size={14} weight="fill" className="text-blue-500 group-hover:scale-110 transition-transform" />
-            <div className="flex flex-col leading-none">
-              <span className="text-[10px] font-black uppercase tracking-tighter text-black">₹1,200</span>
-              <span className="text-[7px] font-bold uppercase tracking-widest text-gray-400">Credit</span>
-            </div>
-          </div>
-        </div>
+        </Link>
 
         {/* Calendar/Date */}
         <div className="hidden md:flex rounded-full items-center gap-2 font-medium" style={{ width: '90px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #DCDCDC', paddingLeft: '12px', paddingRight: '12px' }}>
