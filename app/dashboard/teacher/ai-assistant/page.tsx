@@ -16,6 +16,7 @@ import {
   User,
   PanelLeftOpen,
   PanelLeftClose,
+  X,
 } from "lucide-react";
 
 /* ─────────────────────────────────────
@@ -25,6 +26,7 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   timestamp: string;
+  attachments?: { name: string; size: number }[];
 }
 interface Chat {
   id: string;
@@ -115,8 +117,10 @@ export default function AIAssistantPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const activeChat = chats.find((c) => c.id === activeChatId) ?? null;
   const messages = activeChat?.messages ?? [];
@@ -134,16 +138,33 @@ export default function AIAssistantPage() {
     }
   }, [input]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setAttachments((prev) => [...prev, ...Array.from(e.target.files!)]);
+    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleRemoveAttachment = (idx: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   const startNewChat = () => {
     setActiveChatId(null);
     setInput("");
+    setAttachments([]);
   };
 
   const sendMessage = (text?: string) => {
     const content = (text ?? input).trim();
-    if (!content) return;
+    if (!content && attachments.length === 0) return;
 
-    const userMsg: Message = { role: "user", content, timestamp: now() };
+    const userMsg: Message = { 
+      role: "user", 
+      content, 
+      timestamp: now(),
+      attachments: attachments.length > 0 ? attachments.map(f => ({ name: f.name, size: f.size })) : undefined
+    };
 
     if (!activeChatId) {
       // Create new chat
@@ -169,6 +190,7 @@ export default function AIAssistantPage() {
     }
 
     setInput("");
+    setAttachments([]);
     if (textareaRef.current) textareaRef.current.style.height = "auto";
   };
 
@@ -412,16 +434,28 @@ export default function AIAssistantPage() {
                 >
                   {msg.role === "user" ? (
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, maxWidth: "70%" }}>
-                      <div
-                        style={{
-                          background: "#111", color: "#fff",
-                          padding: "10px 16px", borderRadius: "18px 18px 4px 18px",
-                          fontSize: 14, lineHeight: 1.55,
-                          fontFamily: "'Matter', sans-serif",
-                        }}
-                      >
-                        {msg.content}
-                      </div>
+                      {(msg.content || (msg.attachments && msg.attachments.length > 0)) && (
+                        <div
+                          style={{
+                            background: "#111", color: "#fff",
+                            padding: "10px 16px", borderRadius: "18px 18px 4px 18px",
+                            fontSize: 14, lineHeight: 1.55,
+                            fontFamily: "'Matter', sans-serif",
+                          }}
+                        >
+                          {msg.content}
+                          {msg.attachments && msg.attachments.length > 0 && (
+                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: msg.content ? 8 : 0 }}>
+                              {msg.attachments.map((att, i) => (
+                                <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 10px", background: "rgba(255,255,255,0.1)", borderRadius: 6, fontSize: 12, border: "1px solid rgba(255,255,255,0.2)" }}>
+                                  <FileText style={{ width: 12, height: 12, color: "#d1d5db" }} />
+                                  <span style={{ color: "#f9fafb", maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{att.name}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                       <span style={{ fontSize: 10, color: "#9ca3af" }}>{msg.timestamp}</span>
                     </div>
                   ) : (
@@ -519,6 +553,19 @@ export default function AIAssistantPage() {
             onFocusCapture={(e) => (e.currentTarget.style.borderColor = "#111")}
             onBlurCapture={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
           >
+            {attachments.length > 0 && (
+              <div style={{ padding: "10px 16px 0", display: "flex", gap: 8, flexWrap: "wrap", maxHeight: 100, overflowY: "auto" }}>
+                {attachments.map((file, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", background: "#f3f4f6", borderRadius: 6, fontSize: 12, border: "1px solid #e5e7eb" }}>
+                    <FileText style={{ width: 12, height: 12, color: "#6b7280" }} />
+                    <span style={{ color: "#374151", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{file.name}</span>
+                    <button onClick={() => handleRemoveAttachment(i)} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 2 }}>
+                      <X style={{ width: 12, height: 12, color: "#9ca3af" }} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
             <textarea
               ref={textareaRef}
               value={input}
@@ -542,27 +589,29 @@ export default function AIAssistantPage() {
             <div style={{ padding: "6px 10px 8px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: 4 }}>
                 <button
+                  onClick={() => fileInputRef.current?.click()}
                   style={{ padding: "5px 8px", background: "none", border: "none", cursor: "pointer", color: "#9ca3af", display: "flex", alignItems: "center", gap: 5, fontSize: 12, borderRadius: 6 }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "#f3f4f6")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
                 >
                   <Paperclip style={{ width: 14, height: 14 }} /> Attach
                 </button>
+                <input type="file" multiple ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ fontSize: 11, color: "#d1d5db" }}>Enter to send · Shift+Enter for newline</span>
                 <button
                   onClick={() => sendMessage()}
-                  disabled={!input.trim()}
+                  disabled={!input.trim() && attachments.length === 0}
                   style={{
                     width: 32, height: 32, borderRadius: "50%",
-                    background: input.trim() ? "#111" : "#e5e7eb",
-                    border: "none", cursor: input.trim() ? "pointer" : "not-allowed",
+                    background: (input.trim() || attachments.length > 0) ? "#111" : "#e5e7eb",
+                    border: "none", cursor: (input.trim() || attachments.length > 0) ? "pointer" : "not-allowed",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "background 0.2s", flexShrink: 0,
                   }}
                 >
-                  <ArrowUp style={{ width: 15, height: 15, color: input.trim() ? "#fff" : "#9ca3af", strokeWidth: 2.5 }} />
+                  <ArrowUp style={{ width: 15, height: 15, color: (input.trim() || attachments.length > 0) ? "#fff" : "#9ca3af", strokeWidth: 2.5 }} />
                 </button>
               </div>
             </div>
