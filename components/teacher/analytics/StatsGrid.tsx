@@ -7,7 +7,7 @@ const stats = [
     label: "Overall Grade",
     value: "A-",
     sub: "Top 15% of class",
-    icon: <Award className="text-blue-600" size={20} />,
+    icon: <Award className="text-gray-900" size={20} />,
     trend: "+2%",
     trendUp: true
   },
@@ -15,7 +15,7 @@ const stats = [
     label: "Attendance",
     value: "94%",
     sub: "24/26 sessions",
-    icon: <Clock className="text-purple-600" size={20} />,
+    icon: <Clock className="text-gray-600" size={20} />,
     trend: "+1%",
     trendUp: true
   },

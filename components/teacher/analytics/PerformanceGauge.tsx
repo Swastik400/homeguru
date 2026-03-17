@@ -4,7 +4,7 @@ import React from 'react';
 export default function PerformanceGauge({ score }: { score: number }) {
   const getLevel = (s: number) => {
     if (s >= 90) return { label: 'Excellent', color: 'bg-green-500', text: 'text-green-600' };
-    if (s >= 75) return { label: 'Good', color: 'bg-blue-500', text: 'text-blue-600' };
+    if (s >= 75) return { label: 'Good', color: 'bg-gray-900', text: 'text-gray-900' };
     if (s >= 60) return { label: 'Average', color: 'bg-amber-500', text: 'text-amber-600' };
     return { label: 'At Risk', color: 'bg-red-500', text: 'text-red-600' };
   };
@@ -25,7 +25,7 @@ export default function PerformanceGauge({ score }: { score: number }) {
         <div className="h-4 w-full bg-gray-100 rounded-full flex overflow-hidden">
           <div className="h-full w-[25%] bg-red-400 opacity-30" />
           <div className="h-full w-[25%] bg-amber-400 opacity-30" />
-          <div className="h-full w-[25%] bg-blue-400 opacity-30" />
+          <div className="h-full w-[25%] bg-gray-400 opacity-30" />
           <div className="h-full w-[25%] bg-green-400 opacity-30" />
         </div>
 

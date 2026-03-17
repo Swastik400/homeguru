@@ -101,11 +101,11 @@ export default function StudentProfileHeader({
               <Link
                 key={tab.path}
                 href={tab.path}
-                className={`py-4 text-[13px] font-bold relative transition-colors whitespace-nowrap shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`py-4 text-[13px] font-bold relative transition-colors whitespace-nowrap shrink-0 ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
               >
                 {tab.name}
                 {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900 rounded-full" />
                 )}
               </Link>
             );
