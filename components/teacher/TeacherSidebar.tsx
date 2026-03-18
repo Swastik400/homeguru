@@ -177,7 +177,7 @@ function TeacherSidebar({ isOpen, setIsOpen }: TeacherSidebarProps) {
                         <Link
                           href={item.href}
                           prefetch={false}
-                          className={`flex items-center rounded-[10px] text-[15px] transition-colors duration-[130ms] border-none select-none text-left font-matter ${
+                          className={`flex items-center rounded-[10px] text-[14px] transition-colors duration-[130ms] border-none select-none text-left font-matter ${
                             isOpen 
                               ? 'gap-[12px] px-[16px] py-[11px] mx-[10px] my-[2px] w-[calc(100%-20px)]' 
                               : 'gap-0 p-[11px] mx-[10px] my-[3px] justify-center'
@@ -211,7 +211,7 @@ function TeacherSidebar({ isOpen, setIsOpen }: TeacherSidebarProps) {
           <UserIcon size={18} weight="regular" />
         </div>
         {isOpen && (
-          <span className="text-[15px] text-[#333] font-[500] whitespace-nowrap overflow-hidden text-ellipsis font-matter">
+          <span className="text-[14px] text-[#333] font-[500] whitespace-nowrap overflow-hidden text-ellipsis font-matter">
             Teacher Portal
           </span>
         )}

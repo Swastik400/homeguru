@@ -46,7 +46,7 @@ export default function Header() {
         </div>
 
         {/* Upgrade Button */}
-        <button className="hidden md:block rounded-full hover:opacity-80 transition-opacity font-matter" style={{ width: '100px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #E4D08A', color: '#5A4B15', fontSize: '15px' }}>
+        <button className="hidden md:block rounded-full hover:opacity-80 transition-opacity font-matter" style={{ width: '100px', height: '36px', backgroundColor: '#FFFFFF', border: '1px solid #E4D08A', color: '#5A4B15', fontSize: '14px' }}>
           Upgrade
         </button>
 

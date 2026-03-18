@@ -93,12 +93,12 @@ const LearningActivity = React.memo(() => {
   return (
     <div 
       className="bg-white rounded-[16px] border border-[#E5E7EB] overflow-hidden w-full"
-      style={{ height: '344px', fontFamily: 'DM Sans' }}
+      style={{ height: '344px', fontFamily: 'var(--font-matter)' }}
     >
       {/* Header Section */}
       <div className="px-5 pt-5 pb-3">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[#1A1A1A]" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 600, fontSize: '17px' }}>Learning Activity</h2>
+          <h2 className="text-[#1A1A1A]" style={{ fontFamily: 'var(--font-matter)', fontWeight: 600, fontSize: '18px' }}>Learning Activity</h2>
           
           <div className="relative">
             <button 
@@ -127,7 +127,7 @@ const LearningActivity = React.memo(() => {
           </div>
         </div>
 
-        <p className="text-[#565656] text-[13px] mb-4" style={{ fontFamily: 'DM Sans' }}>
+        <p className="text-[#565656] text-[13px] mb-4" style={{ fontFamily: 'var(--font-matter)' }}>
           You showed up on <span className="font-semibold text-[#1A1A1A]">{stats.loginDays} days</span> this month 🔥
         </p>
 
@@ -137,7 +137,7 @@ const LearningActivity = React.memo(() => {
             <div
               key={item.day}
               className={`flex items-center justify-center rounded-md text-[11px] font-medium ${getStatusStyles(item.status)}`}
-              style={{ width: '26px', height: '26px', fontFamily: 'DM Sans' }}
+              style={{ width: '26px', height: '26px', fontFamily: 'var(--font-matter)' }}
             >
               {item.day}
             </div>
@@ -150,15 +150,15 @@ const LearningActivity = React.memo(() => {
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm bg-[#A4EBB8]"></div>
-            <span className="text-[#565656]" style={{ fontFamily: 'DM Sans', fontSize: '13px', fontWeight: 400 }}>Logged in</span>
+            <span className="text-[#565656]" style={{ fontFamily: 'var(--font-matter)', fontSize: '12px', fontWeight: 400 }}>Logged in</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm bg-[#F2CFA5]"></div>
-            <span className="text-[#565656]" style={{ fontFamily: 'DM Sans', fontSize: '13px', fontWeight: 400 }}><span className="font-semibold text-[#1A1A1A]">{stats.quizAttempts}</span> Quiz attempts</span>
+            <span className="text-[#565656]" style={{ fontFamily: 'var(--font-matter)', fontSize: '12px', fontWeight: 400 }}><span className="font-semibold text-[#1A1A1A]">{stats.quizAttempts}</span> Quiz attempts</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm bg-[#ADD9FA]"></div>
-            <span className="text-[#565656]" style={{ fontFamily: 'DM Sans', fontSize: '13px', fontWeight: 400 }}><span className="font-semibold text-[#1A1A1A]">{stats.newCourses}</span> New course</span>
+            <span className="text-[#565656]" style={{ fontFamily: 'var(--font-matter)', fontSize: '12px', fontWeight: 400 }}><span className="font-semibold text-[#1A1A1A]">{stats.newCourses}</span> New course</span>
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ export default function TeacherUpcomingSchedule() {
             <path d="M200,75.64V40a16,16,0,0,0-16-16H72A16,16,0,0,0,56,40V76a16.07,16.07,0,0,0,6.4,12.8L114.67,128,62.4,167.2A16.07,16.07,0,0,0,56,180v36a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V180.36a16.09,16.09,0,0,0-6.35-12.77L141.27,128l52.38-39.6A16.05,16.05,0,0,0,200,75.64ZM184,216H72V180l56-42,56,42.35Zm0-140.36L128,118,72,76V40H184Z" />
           </svg>
         </div>
-        <h2 className="text-[#0F172A] font-season font-bold text-[20px] tracking-tight">
+        <h2 className="text-[#0F172A] font-season font-bold text-[18px] tracking-tight">
           Upcoming Sessions
         </h2>
       </div>
@@ -126,17 +126,17 @@ export default function TeacherUpcomingSchedule() {
             <div className="flex flex-col gap-3 flex-1">
 
               {/* Starts In Badge */}
-              <div className="bg-[#F8FAFC] text-[#64748B] text-[13px] px-4 py-2 rounded-xl flex items-center gap-2 w-fit border border-[#F1F5F9] font-bold shadow-inner">
+              <div className="bg-[#F8FAFC] text-[#64748B] text-[12px] px-4 py-2 rounded-xl flex items-center gap-2 w-fit border border-[#F1F5F9] font-bold shadow-inner">
                 <Clock size={14} strokeWidth={2.5} />
                 Starts in <span className="text-[#0F172A]">{current.startsIn}</span>
               </div>
 
-              <h3 className="text-[#0F172A] leading-tight text-[24px] md:text-[32px] font-season font-bold tracking-tight">
+              <h3 className="text-[#0F172A] leading-tight text-[22px] md:text-[28px] font-season font-bold tracking-tight">
                 {current.title}<br />{current.subtitle}
               </h3>
 
               {/* Time & Date */}
-              <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[#6B7280] text-[12px] md:text-[13px]" style={{ fontFamily: 'DM Sans' }}>
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[#6B7280] text-[12px]" style={{ fontFamily: 'var(--font-matter)' }}>
                 <span>{current.time}</span>
                 <div className="flex items-center gap-1">
                   {current.period === 'Morning'
@@ -185,7 +185,7 @@ export default function TeacherUpcomingSchedule() {
                 </div>
 
                 {/* Name */}
-                <h4 className="text-[#0F172A] text-[15px] md:text-[17px] tracking-[0.01em] mb-2 text-center break-words max-w-full px-1">
+                <h4 className="text-[#0F172A] text-[14px] md:text-[16px] tracking-[0.01em] mb-2 text-center break-words max-w-full px-1">
                   {current.studentName}
                 </h4>
 
@@ -226,7 +226,7 @@ export default function TeacherUpcomingSchedule() {
 
       {/* Pagination Controls */}
       <div className="flex items-center justify-end mt-3 w-full">
-        <div className="flex items-center gap-2 text-[#6B7280] text-[13px]" style={{ fontFamily: 'DM Sans', width: '110px', height: '22px' }}>
+        <div className="flex items-center gap-2 text-[#6B7280] text-[12px]" style={{ fontFamily: 'var(--font-matter)', width: '110px', height: '22px' }}>
           <button
             onClick={handlePrev}
             disabled={isAnimating}
@@ -235,7 +235,7 @@ export default function TeacherUpcomingSchedule() {
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
           </button>
-          <span className="flex items-center gap-1.5" style={{ fontSize: '13px' }}>
+          <span className="flex items-center gap-1.5" style={{ fontSize: '12px' }}>
             <span className="text-[#1A1A1A]">{currentIndex + 1}</span>
             <span>of</span>
             <span>{SESSIONS.length}</span>

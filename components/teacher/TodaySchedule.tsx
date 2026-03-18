@@ -107,7 +107,7 @@ export default function TodaySchedule() {
             {/* Actions Stack */}
             <div className="flex flex-col items-end gap-2 shrink-0">
               {item.status === 'Live' ? (
-                <button className="flex items-center gap-2 text-[11.5px] text-white bg-[#0F172A] px-4 py-2 rounded-xl shadow-md hover:bg-[#1E293B] transition-all font-bold active:scale-95">
+                <button className="flex items-center gap-2 text-[11px] text-white bg-[#0F172A] px-4 py-2 rounded-xl shadow-md hover:bg-[#1E293B] transition-all font-bold active:scale-95">
                   <Play size={10} weight="fill" />
                   Join
                 </button>
@@ -118,7 +118,7 @@ export default function TodaySchedule() {
                 </div>
               ) : (
                 <div className="flex flex-col items-end gap-1">
-                  <button className="text-[11.5px] text-[#0F172A] bg-white border border-[#E2E8F0] px-4 py-2 rounded-xl hover:bg-[#F8FAFC] transition-all font-bold shadow-sm active:scale-95">
+                  <button className="text-[11px] text-[#0F172A] bg-white border border-[#E2E8F0] px-4 py-2 rounded-xl hover:bg-[#F8FAFC] transition-all font-bold shadow-sm active:scale-95">
                     Profile
                   </button>
                   <span className="text-[10px] text-[#94A3B8] font-semibold uppercase tracking-tighter">in {item.startsIn}</span>

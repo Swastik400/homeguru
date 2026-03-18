@@ -76,7 +76,7 @@ export default function Banner() {
         <h2 className="font-season mb-2 text-[18px] md:text-[24px]" style={{ color: slides[activeSlide].titleColor }}>
           {slides[activeSlide].title}
         </h2>
-        <p className="mb-4 text-[12px] md:text-[14px] font-matter" style={{ color: slides[activeSlide].descriptionColor }}>
+        <p className="mb-4 text-[12px] md:text-[13px] font-matter" style={{ color: slides[activeSlide].descriptionColor }}>
           {slides[activeSlide].description.split('\n').map((line, i) => (
             <span key={i}>
               {line}
@@ -84,7 +84,7 @@ export default function Banner() {
             </span>
           ))}
         </p>
-        <button className="rounded-full hover:opacity-90 text-[14px] md:text-[16px] px-4 md:px-6 py-2 font-matter" style={{ height: '37px', backgroundColor: slides[activeSlide].buttonBgColor, color: slides[activeSlide].buttonTextColor }}>
+        <button className="rounded-full hover:opacity-90 text-[14px] md:text-[14px] px-4 md:px-6 py-2 font-matter" style={{ height: '37px', backgroundColor: slides[activeSlide].buttonBgColor, color: slides[activeSlide].buttonTextColor }}>
           {slides[activeSlide].buttonText}
         </button>
       </div>

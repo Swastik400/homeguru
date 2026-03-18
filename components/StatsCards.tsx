@@ -14,7 +14,7 @@ export default function StatsCards() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>Classes attended</p>
+            <p className="text-gray-700 mb-1.5" style={{ fontSize: '14px', lineHeight: '1.2' }}>Classes attended</p>
             <div className="flex items-center gap-2">
               <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>16</span>
               <span className="text-[#10B981] flex items-center" style={{ fontSize: '11px' }}>
@@ -33,7 +33,7 @@ export default function StatsCards() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>Total learning time</p>
+            <p className="text-gray-700 mb-1.5" style={{ fontSize: '14px', lineHeight: '1.2' }}>Total learning time</p>
             <div className="flex items-center gap-2">
               <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>24h</span>
               <span className="text-[#10B981] flex items-center" style={{ fontSize: '11px' }}>
@@ -52,7 +52,7 @@ export default function StatsCards() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>Assignment done</p>
+            <p className="text-gray-700 mb-1.5" style={{ fontSize: '14px', lineHeight: '1.2' }}>Assignment done</p>
             <div className="flex items-center gap-2">
               <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>3</span>
               <span className="text-[#D9774B]" style={{ fontSize: '11px' }}>

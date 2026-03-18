@@ -63,7 +63,7 @@ export default function CourseStats() {
               {stat.icon}
             </div>
             <div className="flex flex-col">
-              <p className="text-gray-700 mb-1.5" style={{ fontSize: '15px', lineHeight: '1.2' }}>{stat.label}</p>
+              <p className="text-gray-700 mb-1.5" style={{ fontSize: '14px', lineHeight: '1.2' }}>{stat.label}</p>
               <div className="flex items-center gap-2">
                 <span className="text-[#111827]" style={{ fontSize: '22px', lineHeight: '1' }}>{stat.value}</span>
                 <span style={{ fontSize: '11px', color: stat.subColor }} className="flex items-center gap-0.5">

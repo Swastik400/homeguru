@@ -47,7 +47,7 @@ export default function RecentSubmissions() {
       <div className="flex items-center justify-between px-6 py-5 border-b border-gray-50 bg-[#F9FAFB]/50">
         <div className="flex items-center gap-2.5">
           <FileText size={18} weight="bold" className="text-black" />
-          <h2 className="text-[#111827] text-[17px] font-bold font-season">Recent Submissions</h2>
+          <h2 className="text-[#111827] text-[18px] font-bold font-season">Recent Submissions</h2>
         </div>
         <span className="text-[11px] font-black text-white bg-red-500 px-2 py-0.5 rounded-full">3 New</span>
       </div>

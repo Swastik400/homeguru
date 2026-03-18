@@ -24,7 +24,7 @@ export default function UpcomingExams() {
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <Exam size={20} weight="bold" className="text-[#1A1A1A]" />
-        <h2 className="text-[#1A1A1A] text-[17px] font-season">Upcoming Exams & Tests</h2>
+        <h2 className="text-[#1A1A1A] text-[18px] font-season">Upcoming Exams & Tests</h2>
       </div>
 
       <div className="w-full bg-white rounded-[16px] border border-[#E5E7EB] overflow-hidden shadow-[0_2px_8px_-4px_rgba(0,0,0,0.02)]">
@@ -42,7 +42,7 @@ export default function UpcomingExams() {
 
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="text-[#111] text-[15px] font-medium leading-tight">{exam.title}</p>
+                    <p className="text-[#111] text-[14px] font-medium leading-tight">{exam.title}</p>
                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${exam.status === 'ready' ? 'bg-[#F8FAFC] text-[#0F172A] border-[#E2E8F0]' : 'bg-gray-100 text-gray-500 border-transparent'
                       }`}>
                       {exam.status}
@@ -77,7 +77,7 @@ export default function UpcomingExams() {
           <span className="text-[12px] text-[#8B92A5]">4 exams this month</span>
           <button 
             onClick={() => router.push('/dashboard/teacher/quizzes')}
-            className="text-[13px] text-[#3D4A6B] font-medium hover:underline"
+            className="text-[12px] text-[#3D4A6B] font-medium hover:underline"
           >
             + Create new exam
           </button>

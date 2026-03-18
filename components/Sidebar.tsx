@@ -128,7 +128,7 @@ export default React.memo(function Sidebar({ isOpen, setIsOpen }: SidebarProps) 
         {navGroups.map((group, index) => (
           <div key={index} className="mb-5">
             {isOpen && (
-              <h3 className="text-[#8E8E8E] text-[13px] font-medium tracking-wider mb-2 px-3">
+              <h3 className="text-[#8E8E8E] text-[11px] font-medium tracking-wider mb-2 px-3">
                 {group.label}
               </h3>
             )}
@@ -137,7 +137,7 @@ export default React.memo(function Sidebar({ isOpen, setIsOpen }: SidebarProps) 
                 <li key={itemIdx}>
                   <a
                     href="#"
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[16px] font-normal transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-normal transition-colors ${
                       item.isActive
                         ? 'bg-[#3D4D6E] text-white'
                         : 'text-[#CCCCCC] hover:bg-[#3D4D6E]/50 hover:text-white'

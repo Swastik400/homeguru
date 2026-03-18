@@ -98,14 +98,14 @@ export default function StudentOverview() {
             </svg>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-[#0F172A] text-[22px] font-season font-bold tracking-tight">Students Analytics</h2>
-            <span className="text-[#64748B] text-[13px] font-semibold uppercase tracking-wider">48 Total Enrolled</span>
+            <h2 className="text-[#0F172A] text-[18px] font-season font-bold tracking-tight">Students Analytics</h2>
+            <span className="text-[#64748B] text-[12px] font-semibold uppercase tracking-wider">48 Total Enrolled</span>
           </div>
         </div>
 
         <div className="flex items-center flex-wrap gap-3">
           <div className="relative group">
-            <button className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13.5px] font-bold text-[#475569] hover:bg-[#F8FAFC] transition-all shadow-sm">
+            <button className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-bold text-[#475569] hover:bg-[#F8FAFC] transition-all shadow-sm">
               <Filter size={14} strokeWidth={2.5} />
               <span>{filter}</span>
               <ChevronDown size={14} strokeWidth={2.5} className="ml-1 opacity-60" />
@@ -117,7 +117,7 @@ export default function StudentOverview() {
             <input
               type="text"
               placeholder="Find a student by name..."
-              className="bg-transparent border-none outline-none text-[13.5px] text-[#1E293B] placeholder-[#94A3B8] w-full font-medium"
+              className="bg-transparent border-none outline-none text-[13px] text-[#1E293B] placeholder-[#94A3B8] w-full font-medium"
             />
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function StudentOverview() {
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-1.5">
-                      <span className={`text-[15px] font-black ${s.score > 85 ? 'text-green-600' : s.score > 60 ? 'text-gray-900' : 'text-red-600'}`}>
+                      <span className={`text-[14px] font-black ${s.score > 85 ? 'text-green-600' : s.score > 60 ? 'text-gray-900' : 'text-red-600'}`}>
                         {s.score}
                       </span>
                       <span className="text-[11px] text-gray-400 font-bold">/100</span>
@@ -216,7 +216,7 @@ export default function StudentOverview() {
               <span className="text-[11px] font-bold text-[#991B1B] uppercase tracking-wider whitespace-nowrap">2 Flagged for Attention</span>
             </div>
           </div>
-          <button className="w-full md:w-auto flex items-center justify-center gap-2.5 px-6 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[12.5px] font-bold text-[#0F172A] hover:bg-[#F8FAFC] transition-all shadow-sm active:scale-95 mt-2 md:mt-0">
+          <button className="w-full md:w-auto flex items-center justify-center gap-2.5 px-6 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[12px] font-bold text-[#0F172A] hover:bg-[#F8FAFC] transition-all shadow-sm active:scale-95 mt-2 md:mt-0">
             Open Full Management
           </button>
         </div>

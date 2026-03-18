@@ -24,7 +24,7 @@ export default function LearningQuest() {
         </div>
         
         {/* Heading */}
-        <h2 className="font-season" style={{ fontSize: '20px', color: '#ffffff', letterSpacing: '0.02em' }}>
+        <h2 className="font-season" style={{ fontSize: '18px', color: '#ffffff', letterSpacing: '0.02em' }}>
           Learning Quest
         </h2>
       </div>
@@ -89,7 +89,7 @@ export default function LearningQuest() {
             height: '41px', 
             backgroundColor: '#FFFFFF', 
             color: '#000000', 
-            fontSize: '15px',
+            fontSize: '14px',
             border: 'none',
             cursor: 'pointer'
           }}

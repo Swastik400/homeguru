@@ -1,7 +1,8 @@
 "use client";
 import { useState, memo, useEffect, useRef } from "react";
-import { MagnifyingGlass, Bell, VideoCamera, Plus, CalendarBlank, CheckCircle, Clock, Info, X, DotsThreeVertical, Lightning } from "@phosphor-icons/react";
+import { MagnifyingGlass, Bell, VideoCamera, Plus, CalendarBlank, CheckCircle, Clock, Info, X, Lightning, UserCircle, Gear, SignOut } from "@phosphor-icons/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const NOTIFICATIONS = [
   {
@@ -34,18 +35,25 @@ const NOTIFICATIONS = [
 ];
 
 export default memo(function TeacherHeader() {
+  const router = useRouter();
   const [isOnline, setIsOnline] = useState(true);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const notifDropdownRef = useRef<HTMLDivElement>(null);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (notifDropdownRef.current && !notifDropdownRef.current.contains(event.target as Node)) {
         setShowNotifications(false);
+      }
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false);
       }
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setIsSearchOpen(false);
@@ -61,6 +69,7 @@ export default memo(function TeacherHeader() {
       if (e.key === "Escape") {
         setIsSearchOpen(false);
         setShowNotifications(false);
+        setShowProfileMenu(false);
       }
     }
     window.addEventListener("keydown", handleKeyDown);
@@ -73,6 +82,14 @@ export default memo(function TeacherHeader() {
       inputRef.current.focus();
     }
   }, [isSearchOpen]);
+
+  const handleStartLiveClass = () => {
+    router.push('/dashboard/teacher/classroom');
+  };
+
+  const handleCreateCourse = () => {
+    router.push('/dashboard/teacher/courses');
+  };
 
   return (
     <header className="flex items-center justify-between w-full flex-wrap gap-4 font-matter">
@@ -92,11 +109,17 @@ export default memo(function TeacherHeader() {
           <div className="flex items-center transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]">
             {/* Action Buttons Container - Stay visible, just move left */}
             <div className={`flex items-center gap-2 mr-2 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}>
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-bold hover:bg-black transition-all shadow-sm active:scale-95 whitespace-nowrap">
+              <button 
+                onClick={handleStartLiveClass}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-bold hover:bg-black transition-all shadow-sm active:scale-95 whitespace-nowrap"
+              >
                 <VideoCamera size={16} weight="bold" />
                 <span>Start Live Class</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-bold hover:bg-black transition-all shadow-sm active:scale-95 whitespace-nowrap">
+              <button 
+                onClick={handleCreateCourse}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-bold hover:bg-black transition-all shadow-sm active:scale-95 whitespace-nowrap"
+              >
                 <Plus size={16} weight="bold" />
                 <span>Create Course</span>
               </button>
@@ -143,10 +166,13 @@ export default memo(function TeacherHeader() {
         </div>
 
         {/* Notification Icon */}
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative" ref={notifDropdownRef}>
           <button 
             aria-label="Notifications"
-            onClick={() => setShowNotifications(!showNotifications)}
+            onClick={() => {
+              setShowNotifications(!showNotifications);
+              setShowProfileMenu(false);
+            }}
             className={`relative rounded-full flex items-center justify-center transition-all ${
               showNotifications ? 'bg-gray-100 scale-95' : 'bg-white hover:bg-gray-50'
             }`}
@@ -157,7 +183,7 @@ export default memo(function TeacherHeader() {
             <span className="absolute top-[8px] right-[10px] w-2 h-2 bg-blue-600 rounded-full border border-white"></span>
           </button>
 
-          {/* Premium Dropdown */}
+          {/* Premium Notification Dropdown */}
           {showNotifications && (
             <div className="absolute right-0 mt-3 w-[320px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-[#EEE] z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
               {/* Dropdown Header */}
@@ -227,14 +253,68 @@ export default memo(function TeacherHeader() {
           <span style={{ color: '#141B34', fontSize: '13px' }}>12 Mar</span>
         </div>
 
-        {/* User Profile Avatar */}
-        <button className="ml-2 w-[42px] h-[42px] rounded-full overflow-hidden border border-gray-200 hover:opacity-90 transition-opacity">
-          <img 
-            src="https://i.pravatar.cc/150?img=47" 
-            alt="Teacher profile" 
-            className="w-full h-full object-cover"
-          />
-        </button>
+        {/* User Profile Avatar with Dropdown */}
+        <div className="relative" ref={profileDropdownRef}>
+          <button 
+            onClick={() => {
+              setShowProfileMenu(!showProfileMenu);
+              setShowNotifications(false);
+            }}
+            className="ml-2 w-[42px] h-[42px] rounded-full overflow-hidden border border-gray-200 hover:opacity-90 transition-opacity focus:ring-2 focus:ring-black focus:ring-offset-2"
+          >
+            <img 
+              src="https://i.pravatar.cc/150?img=47" 
+              alt="Teacher profile" 
+              className="w-full h-full object-cover"
+            />
+          </button>
+
+          {/* Profile Dropdown Menu */}
+          {showProfileMenu && (
+            <div className="absolute right-0 mt-3 w-[260px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-[#EEE] z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              {/* Profile Header Info */}
+              <div className="px-5 py-4 border-b border-[#F5F5F5] bg-gray-50/50">
+                <p className="text-[15px] font-bold text-[#111]">Cersei Lannister</p>
+                <p className="text-[13px] text-gray-500 font-medium">cersei@homeguru.com</p>
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-1 bg-green-50 text-green-700 border border-green-100 rounded-md text-[11px] font-bold uppercase tracking-wider">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                  Online
+                </div>
+              </div>
+
+              {/* Action Links */}
+              <div className="p-2 flex flex-col">
+                <Link
+                  href="/dashboard/teacher/profile"
+                  onClick={() => setShowProfileMenu(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-gray-700 transition-colors"
+                >
+                  <UserCircle size={20} className="text-gray-400" />
+                  Edit Profile
+                </Link>
+                <Link
+                  href="/dashboard/teacher/settings"
+                  onClick={() => setShowProfileMenu(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-gray-700 transition-colors"
+                >
+                  <Gear size={20} className="text-gray-400" />
+                  Account Settings
+                </Link>
+                <div className="h-px bg-gray-100 my-1 rounded-full mx-2" />
+                <button
+                  onClick={() => {
+                    setShowProfileMenu(false);
+                    router.push('/login');
+                  }}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-[14px] font-medium text-red-600 transition-colors"
+                >
+                  <SignOut size={20} className="text-red-400" />
+                  Log Out
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         
       </div>
     </header>

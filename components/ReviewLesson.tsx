@@ -69,7 +69,7 @@ export default function ReviewLesson() {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#1A1A1A" viewBox="0 0 256 256">
           <path d="M149.61,85.71l-89.6,88a8,8,0,0,1-11.22,0L10.39,136a8,8,0,1,1,11.22-11.41L54.4,156.79l84-82.5a8,8,0,1,1,11.22,11.42Zm96.1-11.32a8,8,0,0,0-11.32-.1l-84,82.5-18.83-18.5a8,8,0,0,0-11.21,11.42l24.43,24a8,8,0,0,0,11.22,0l89.6-88A8,8,0,0,0,245.71,74.39Z"></path>
         </svg>
-        <h2 className="text-[#1A1A1A] text-[17px] font-semibold tracking-wide">
+        <h2 className="text-[#1A1A1A] text-[18px] font-semibold tracking-wide">
           Review last class lesson
         </h2>
       </div>
@@ -85,11 +85,11 @@ export default function ReviewLesson() {
         
         {/* Top Row: Date Badge & Files Link */}
         <div className="flex justify-between items-center mb-5">
-          <div className="bg-[#EEF2F6] text-[#4B5563] text-[12px] font-medium px-2.5 py-1 rounded-[6px]">
+          <div className="bg-[#EEF2F6] text-[#4B5563] text-[11px] font-medium px-2.5 py-1 rounded-[6px]">
             {currentLesson.daysAgo}
           </div>
           
-          <button className="flex items-center gap-1.5 text-[#293966] text-[14px] font-medium hover:opacity-80 transition-opacity">
+          <button className="flex items-center gap-1.5 text-[#293966] text-[13px] font-medium hover:opacity-80 transition-opacity">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#293966" viewBox="0 0 256 256">
               <path d="M165.66,90.34a8,8,0,0,1,0,11.32l-64,64a8,8,0,0,1-11.32-11.32l64-64A8,8,0,0,1,165.66,90.34ZM215.6,40.4a56,56,0,0,0-79.2,0L106.34,70.45a8,8,0,0,0,11.32,11.32l30.06-30a40,40,0,0,1,56.57,56.56l-30.07,30.06a8,8,0,0,0,11.31,11.32L215.6,119.6a56,56,0,0,0,0-79.2ZM138.34,174.22l-30.06,30.06a40,40,0,1,1-56.56-56.57l30.05-30.05a8,8,0,0,0-11.32-11.32L40.4,136.4a56,56,0,0,0,79.2,79.2l30.06-30.07a8,8,0,0,0-11.32-11.31Z"></path>
             </svg>
@@ -99,7 +99,7 @@ export default function ReviewLesson() {
 
         {/* Middle Row: Title & Stats */}
         <div className="flex justify-between items-start mb-6">
-          <h3 className="text-[#111827] text-[20px] font-bold leading-[1.3] max-w-[200px] tracking-tight">
+          <h3 className="text-[#111827] text-[18px] font-bold leading-[1.3] max-w-[200px] tracking-tight">
             {currentLesson.title}
           </h3>
           
@@ -107,15 +107,15 @@ export default function ReviewLesson() {
             {/* Quiz Score Stat */}
             <div className="flex flex-col">
               <div className="flex items-baseline">
-                <span className="text-[18px] font-bold text-[#111827]">{currentLesson.quizScore}</span>
-                <span className="text-[13px] font-medium text-[#4B5563]">/{currentLesson.quizTotal}</span>
+                <span className="text-[16px] font-bold text-[#111827]">{currentLesson.quizScore}</span>
+                <span className="text-[12px] font-medium text-[#4B5563]">/{currentLesson.quizTotal}</span>
               </div>
               <span className="text-[12px] text-[#6B7280] mt-0.5">Quiz score</span>
             </div>
             
             {/* Duration Stat */}
             <div className="flex flex-col">
-              <span className="text-[18px] font-bold text-[#111827] leading-none mt-0.5">
+              <span className="text-[16px] font-bold text-[#111827] leading-none mt-0.5">
                 {currentLesson.duration}
               </span>
               <span className="text-[12px] text-[#6B7280] mt-1.5">Duration</span>
@@ -130,7 +130,7 @@ export default function ReviewLesson() {
               <img src={currentLesson.teacherImage} alt={currentLesson.teacherName} className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[#111827] text-[14.5px] font-medium">
+              <span className="text-[#111827] text-[14px] font-medium">
                 by {currentLesson.teacherName}
               </span>
               <button className="flex items-center gap-1 text-[#A68A48] text-[13px] font-medium w-fit hover:opacity-80 transition-opacity mt-0.5">
@@ -142,13 +142,13 @@ export default function ReviewLesson() {
             </div>
           </div>
           
-          <button className="px-5 py-2.5 rounded-full border border-gray-300 text-[#111827] text-[14.5px] font-medium hover:bg-gray-50 transition-colors shadow-sm">
+          <button className="px-5 py-2.5 rounded-full border border-gray-300 text-[#111827] text-[14px] font-medium hover:bg-gray-50 transition-colors shadow-sm">
             Reschedule
           </button>
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex items-center justify-end gap-3 text-[#6B7280] text-[13.5px] font-medium border-t border-transparent pt-1">
+        <div className="flex items-center justify-end gap-3 text-[#6B7280] text-[12px] font-medium border-t border-transparent pt-1">
           <button 
             onClick={handlePrev}
             disabled={isAnimating}

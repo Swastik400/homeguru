@@ -125,7 +125,7 @@ export default function LearningHours() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2.5">
           <BookOpen className="w-5 h-5 text-gray-800" strokeWidth={2} />
-          <h2 className="text-[#111827] text-[16px] font-season">Learning Hours</h2>
+          <h2 className="text-[#111827] text-[18px] font-season">Learning Hours</h2>
         </div>
         <div className="relative" ref={dropdownRef}>
           <button 
@@ -296,7 +296,7 @@ export default function LearningHours() {
         </div>
       </div>
       
-      <div className="mt-2 flex items-center justify-center gap-6 text-[13px] text-[#6B7280]">
+      <div className="mt-2 flex items-center justify-center gap-6 text-[12px] text-[#6B7280]">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-[#5A79C2]"></span>
           Study

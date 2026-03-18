@@ -29,7 +29,7 @@ export default function PendingAssignments() {
           <polyline points="3 3 3 8 8 8"></polyline>
           <polyline points="12 7 12 12 15 15"></polyline>
         </svg>
-        <h2 className="text-[#111827] text-[17px] tracking-wide font-season">
+        <h2 className="text-[#111827] text-[18px] tracking-wide font-season">
           Pending Assignmements
         </h2>
       </div>
@@ -57,21 +57,21 @@ export default function PendingAssignments() {
                 {/* Text & Tags */}
                 <div className="flex flex-col">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-[#111827] text-[16px]">
+                    <h3 className="text-[#111827] text-[14px]">
                       {assignment.title}
                     </h3>
                     <span className={`px-2 py-0.5 rounded-[4px] text-[11px] tracking-wide ${assignment.tagColor}`}>
                       {assignment.tagText}
                     </span>
                   </div>
-                  <p className="text-[#8B92A5] text-[14px] mt-0.5">
+                  <p className="text-[#8B92A5] text-[13px] mt-0.5">
                     {assignment.teacher}
                   </p>
                 </div>
               </div>
 
               {/* Action Button */}
-              <button className="px-5 py-2 bg-white border border-gray-200 rounded-[10px] text-[#111827] text-[14px] shadow-sm hover:bg-gray-50 transition-colors">
+              <button className="px-5 py-2 bg-white border border-gray-200 rounded-[10px] text-[#111827] text-[13px] shadow-sm hover:bg-gray-50 transition-colors">
                 View
               </button>
             </div>

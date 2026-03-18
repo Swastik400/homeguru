@@ -68,14 +68,14 @@ export default function CourseList() {
                 {/* Text & Tags */}
                 <div className="flex flex-col">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-[#111827] text-[16px] font-medium">
+                    <h3 className="text-[#111827] text-[14px] font-medium">
                       {course.name}
                     </h3>
                     <span className={`px-2 py-0.5 rounded-[4px] text-[10px] tracking-widest font-black uppercase ${course.tagColor}`}>
                       {course.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 text-[#8B92A5] text-[13px] mt-0.5">
+                  <div className="flex items-center gap-4 text-[#8B92A5] text-[12px] mt-0.5">
                     <div className="flex items-center gap-1.5">
                        <Layers size={14} />
                        {course.modules} Modules
@@ -93,7 +93,7 @@ export default function CourseList() {
 
               {/* Action Button */}
               <div className="flex items-center gap-3">
-                <button className="px-6 py-2 bg-white border border-gray-200 rounded-[10px] text-[#111827] text-[14px] font-bold shadow-sm hover:bg-gray-50 transition-colors">
+                <button className="px-6 py-2 bg-white border border-gray-200 rounded-[10px] text-[#111827] text-[13px] font-bold shadow-sm hover:bg-gray-50 transition-colors">
                   Manage
                 </button>
                 <div className="w-10 h-10 flex items-center justify-center rounded-[10px] bg-gray-50 text-gray-400 cursor-pointer hover:bg-gray-100 transition-colors">
